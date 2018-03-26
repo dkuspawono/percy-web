@@ -20,14 +20,6 @@ export default Controller.extend({
   numSnapshotsMissing: 0,
   numSnapshotsUnchanged: alias('numSnapshotsMissing'),
 
-  showDiffs: true,
-
-  actions: {
-    toggleShowDiffs() {
-      this.toggleProperty('showDiffs');
-    },
-  },
-
   // This breaks the binding for snapshotsChanged, specifically so that when a user clicks
   // approve, the snapshot stays in place until reload.
   //
