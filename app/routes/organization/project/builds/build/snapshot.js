@@ -34,9 +34,10 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
     });
   },
   actions: {
-    tmp() {
-      console.log('tmp');
+    closeSnapshotFullModal(buildId) {
+      this.transitionTo('organization.project.builds.build', buildId);
     },
+
     didTransition() {
       this._super(...arguments);
       // this.send('updateModalState', true);

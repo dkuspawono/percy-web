@@ -73,21 +73,5 @@ export default Route.extend(AuthenticatedRouteMixin, {
         },
       );
     },
-    closeSnapshotFullModal(buildId) {
-      // this.send('updateModalState', false);
-      this.transitionTo('organization.project.builds.build', buildId);
-    },
-
-    createReview(action, build, snapshots) {
-      const review = this.get('store').createRecord('review', {
-        build: build,
-        snapshots: snapshots,
-      });
-      return review.save().then(() => {
-        const build = this.modelFor(this.routeName);
-        build.get('snapshots').reload();
-        build.reload();
-      });
-    },
   },
 });
