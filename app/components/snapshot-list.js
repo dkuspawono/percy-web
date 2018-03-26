@@ -43,14 +43,12 @@ export default Component.extend({
     $(document).bind(
       'keydown.snapshots',
       function(e) {
-        if (!this.get('isShowingModal')) {
-          if (e.keyCode === 40) {
-            // down arrow
-            this.set('activeSnapshotId', this._calculateNewActiveSnapshotId({isNext: true}));
-          } else if (e.keyCode === 38) {
-            // up arrow
-            this.set('activeSnapshotId', this._calculateNewActiveSnapshotId({isNext: false}));
-          }
+        if (e.keyCode === 40) {
+          // down arrow
+          this.set('activeSnapshotId', this._calculateNewActiveSnapshotId({isNext: true}));
+        } else if (e.keyCode === 38) {
+          // up arrow
+          this.set('activeSnapshotId', this._calculateNewActiveSnapshotId({isNext: false}));
         }
       }.bind(this),
     );

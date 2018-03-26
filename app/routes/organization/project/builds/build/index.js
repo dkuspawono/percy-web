@@ -49,9 +49,6 @@ export default Route.extend(AuthenticatedRouteMixin, {
       this.analytics.track('Build Viewed', organization, eventProperties);
     },
 
-    // updateModalState(state) {
-    //   this.get('currentModel').set('isShowingModal', state);
-    // },
     openSnapshotFullModal(snapshotId, snapshotSelectedWidth) {
       let build = this.modelFor(this.routeName);
       let organization = build.get('project.organization');

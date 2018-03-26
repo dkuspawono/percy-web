@@ -6,10 +6,6 @@ import {inject as service} from '@ember/service';
 export default Component.extend(PollingMixin, {
   build: null,
   classNames: ['BuildContainer'],
-  classNameBindings: [
-    'classes',
-    'isShowingModal:BuildContainer--snapshotModalOpen:BuildContainer--snapshotModalClosed',
-  ],
 
   snapshotQuery: service(),
   snapshotsChanged: null,
