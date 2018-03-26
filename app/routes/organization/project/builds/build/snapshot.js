@@ -7,6 +7,9 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
   queryParams: {
     comparisonMode: {as: 'mode'},
   },
+
+  isModalShowing: true,
+
   model(params /*transition*/) {
     this.set('params', params);
     let buildId = this.modelFor('organization.project.builds.build').get('id');
@@ -31,9 +34,12 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
     });
   },
   actions: {
+    tmp() {
+      console.log('tmp');
+    },
     didTransition() {
       this._super(...arguments);
-      this.send('updateModalState', true);
+      // this.send('updateModalState', true);
 
       let build = this.modelFor(this.routeName);
       let organization = build.get('project.organization');
