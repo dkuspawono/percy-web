@@ -33,6 +33,7 @@ export default DS.Model.extend({
     return `Build #${this.get('buildNumber')}`;
   }),
   branch: DS.attr(),
+  browsers: DS.hasMany('browser'),
 
   // Processing state.
   state: DS.attr(),
