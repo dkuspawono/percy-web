@@ -6,4 +6,5 @@ export default DS.Model.extend({
   browserFamily: DS.belongsTo('browserFamily', {async: false, inverse: null}),
   version: DS.attr(),
   name: alias('browserFamily.name'),
+  slug: alias('browserFamily.slug'),
 });

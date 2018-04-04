@@ -5,9 +5,11 @@ import {alias, equal, filterBy, not, or} from '@ember/object/computed';
 import utils from 'percy-web/lib/utils';
 
 export default Component.extend({
+  flashMessages: service(),
   // required params
   snapshot: null,
-  flashMessages: service(),
+  isBuildFinished: null,
+  browsers: null,
   selectedWidth: null,
   selectedComparison: null,
 
