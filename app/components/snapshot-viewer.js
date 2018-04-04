@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import {not, alias, or} from '@ember/object/computed';
+import {not, alias, or, sort} from '@ember/object/computed';
 import {computed, observer} from '@ember/object';
 import Component from '@ember/component';
 import {next} from '@ember/runloop';
@@ -78,6 +78,12 @@ export default Component.extend({
   isActionable: alias('isNotExpanded'),
   showNoDiffSnapshot: or('isFocus', 'isExpanded'),
 
+  buildBrowsers: sort('build.browsers', 'browserSort'),
+  browserSort: ['slug'],
+  activeBrowser: computed('buildBrowsers.firstObject', function() {
+    return this.get('buildBrowsers.firstObject');
+  }),
+
   click() {
     this.set('_shouldScroll', false);
     this.get('updateActiveSnapshotId')(this.get('snapshot.id'));
@@ -91,6 +97,10 @@ export default Component.extend({
       if (!this.get('_defaultIsExpanded')) {
         this.set('isUserExpanded', true);
       }
+    },
+    // TODO: do this in full screen mode also
+    updateActiveBrowser(browser) {
+      this.set('activeBrowser', browser);
     },
   },
 });

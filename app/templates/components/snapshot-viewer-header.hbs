@@ -24,8 +24,11 @@
   <div class="flex justify-end">
     <div class="btn-toolbar">
       <div class="btn-group">
-        {{#each (sort-by 'slug' browsers) as |browser|}}
-          <button type="button" class="btn btn-square"><i class="fa fa-{{browser.slug}}"></i></button>
+        {{#each browsers as |browser|}}
+          <button type="button"
+            class="btn btn-square {{if (eq browser.id activeBrowser.id) "is-active"}}"
+            {{action updateActiveBrowser browser}}
+          ><i class="fa fa-{{browser.slug}}"></i></button>
         {{/each}}
       </div>
       <div class="btn-group">

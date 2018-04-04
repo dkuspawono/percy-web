@@ -2,11 +2,13 @@
   fullscreen=false
   snapshot=snapshot
   isBuildFinished=build.isFinished
-  browsers=build.browsers
+  browsers=buildBrowsers
+  activeBrowser=activeBrowser
   selectedWidth=snapshotSelectedWidth
   selectedComparison=selectedComparison
   toggleViewMode=(action showSnapshotFullModalTriggered snapshot.id snapshotSelectedWidth)
   updateSelectedWidth=(action "updateSelectedWidth")
+  updateActiveBrowser=(action "updateActiveBrowser")
   createReview=(action createReview "approve" build)
   expandSnapshot=(action "expandSnapshot")
 }}

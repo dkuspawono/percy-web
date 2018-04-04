@@ -12,6 +12,7 @@ export default Component.extend({
   browsers: null,
   selectedWidth: null,
   selectedComparison: null,
+  updateActiveBrowser: null,
 
   // optional params
   fullscreen: false,
