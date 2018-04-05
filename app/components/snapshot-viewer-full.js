@@ -6,7 +6,7 @@ export default Component.extend({
   classNames: ['SnapshotViewerFull'],
   build: null,
   comparisonMode: null,
-  snapshotId: null,
+  snapshot: null,
   snapshotSelectedWidth: null,
 
   galleryMap: ['base', 'diff', 'head'],
@@ -15,10 +15,6 @@ export default Component.extend({
 
   galleryIndex: computed('comparisonMode', function() {
     return this.get('galleryMap').indexOf(this.get('comparisonMode'));
-  }),
-
-  snapshot: computed('build.snapshots.[]', 'snapshotId', function() {
-    return this.get('build.snapshots').findBy('id', this.get('snapshotId'));
   }),
 
   comparisons: alias('snapshot.comparisons'),

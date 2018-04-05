@@ -1,6 +1,7 @@
 import Route from '@ember/routing/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import ResetScrollMixin from 'percy-web/mixins/reset-scroll';
+import {hash} from 'rsvp';
 
 export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
   params: {},
@@ -8,24 +9,23 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
     comparisonMode: {as: 'mode'},
   },
 
-  model(params /*transition*/) {
+  model(params) {
     this.set('params', params);
-    let buildId = this.modelFor('organization.project.builds.build').get('id');
-    return this.store.findRecord('build', buildId);
+    const snapshot = this.store.findRecord('snapshot', params.snapshot_id);
+    const build = this.modelFor('organization.project.builds.build');
+    return hash({
+      build,
+      snapshot,
+    });
   },
-  afterModel(resolvedModel) {
-    // Avoids race condition to get snapshots on build in components. Because the underlying
-    // lookup is an async relationship, the get triggers a promise which allows route cycle
-    // blocking behavior.
-    return resolvedModel.get('snapshots');
-  },
+
   setupController(controller, model) {
     this._super(...arguments);
 
     let params = this.get('params');
 
     controller.setProperties({
-      build: model,
+      build: model.build,
       snapshotId: params.snapshot_id,
       snapshotSelectedWidth: params.width,
       comparisonMode: params.comparisonMode,
@@ -39,7 +39,7 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
     didTransition() {
       this._super(...arguments);
 
-      let build = this.modelFor(this.routeName);
+      let build = this.modelFor(this.routeName).build;
       let organization = build.get('project.organization');
       let eventProperties = {
         project_id: build.get('project.id'),
