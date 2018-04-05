@@ -230,8 +230,12 @@ describe('Acceptance: Fullscreen Snapshot', function() {
       project,
       createdAt: moment().subtract(2, 'minutes'),
       finishedAt: moment().subtract(5, 'seconds'),
+      totalSnapshots: 3,
     });
     snapshot = server.create('snapshot', 'withComparison', {build});
+    // Make some other snapshots for the build that should appear when closing the fullscreen view.
+    server.create('snapshot', 'withComparison', {build});
+    server.create('snapshot', 'noDiffs', {build});
 
     urlParams = {
       orgSlug: organization.slug,
@@ -275,6 +279,12 @@ describe('Acceptance: Fullscreen Snapshot', function() {
     await BuildPage.visitFullPageSnapshot(urlParams);
     BuildPage.snapshotFullscreen.header.clickDropdownToggle();
 
+    await percySnapshot(this.test);
+  });
+
+  it("fetches the build's snapshots when the fullscreen view is closed", async function() {
+    await BuildPage.visitFullPageSnapshot(urlParams);
+    await BuildPage.snapshotFullscreen.clickToggleFullScreen();
     await percySnapshot(this.test);
   });
 });
