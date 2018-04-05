@@ -46,7 +46,7 @@ describe('Integration: SnapshotViewerFull', function() {
     this.setProperties({
       build,
       snapshotSelectedWidth,
-      snapshotId: snapshot.get('id'),
+      snapshot,
       comparisonMode: 'diff',
       closeSnapshotFullModal: closeSnapshotFullModalStub,
       updateComparisonMode: updateComparisonModeStub,
@@ -55,7 +55,7 @@ describe('Integration: SnapshotViewerFull', function() {
     });
 
     this.render(hbs`{{snapshot-viewer-full
-      snapshotId=snapshotId
+      snapshot=snapshot
       build=build
       snapshotSelectedWidth=snapshotSelectedWidth
       comparisonMode=comparisonMode
@@ -94,7 +94,7 @@ describe('Integration: SnapshotViewerFull', function() {
     });
 
     it('shows "New" button when snapshot is new', function() {
-      this.set('snapshotId', addedSnapshot.get('id'));
+      this.set('snapshot', addedSnapshot);
 
       expect(FullSnapshotPage.isNewComparisonModeButtonVisible).to.equal(true);
       percySnapshot(this.test);

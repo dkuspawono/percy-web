@@ -11,7 +11,13 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
 
   model(params) {
     this.set('params', params);
-    const snapshot = this.store.findRecord('snapshot', params.snapshot_id);
+    // Try getting the snapshot from the store first.
+    let snapshot = this.store.peekRecord('snapshot', params.snapshot_id);
+    if (!snapshot) {
+      // If it's not in the store, make a query.
+      snapshot = this.store.findRecord('snapshot', params.snapshot_id);
+    }
+
     const build = this.modelFor('organization.project.builds.build');
     return hash({
       build,
