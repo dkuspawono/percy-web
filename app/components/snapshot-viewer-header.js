@@ -12,7 +12,7 @@ export default Component.extend({
   browsers: null,
   selectedWidth: null,
   selectedComparison: null,
-  updateActiveBrowser: null,
+  selectedBrowser: null,
 
   // optional params
   fullscreen: false,
@@ -22,10 +22,10 @@ export default Component.extend({
   // required actions
   toggleViewMode: null,
   updateSelectedWidth: null,
+  updateSelectedBrowser: null,
 
   // optional actions
   expandSnapshot() {},
-  registerChild() {},
   updateComparisonMode() {},
 
   isShowingFilteredComparisons: true,

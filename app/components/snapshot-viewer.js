@@ -24,12 +24,17 @@ export default Component.extend({
 
   defaultWidth: or('snapshot.maxComparisonWidthWithDiff', 'snapshot.maxComparisonWidth'),
 
-  selectedComparison: computed('snapshot.widestComparison', 'snapshotSelectedWidth', function() {
-    return (
-      this.get('snapshot').comparisonForWidth(this.get('snapshotSelectedWidth')) ||
-      this.get('snapshot.widestComparison')
-    );
-  }),
+  selectedComparison: computed(
+    'snapshot.widestComparison',
+    'snapshotSelectedWidth',
+    'selectedBrowser',
+    function() {
+      return (
+        this.get('snapshot').comparisonForWidth(this.get('snapshotSelectedWidth')) ||
+        this.get('snapshot.widestComparison')
+      );
+    },
+  ),
 
   isActiveSnapshot: computed('activeSnapshotId', 'snapshot.id', function() {
     return this.get('activeSnapshotId') === this.get('snapshot.id');
@@ -80,7 +85,7 @@ export default Component.extend({
 
   buildBrowsers: sort('build.browsers', 'browserSort'),
   browserSort: ['slug'],
-  activeBrowser: computed('buildBrowsers.firstObject', function() {
+  selectedBrowser: computed('buildBrowsers.firstObject', function() {
     return this.get('buildBrowsers.firstObject');
   }),
 
@@ -99,8 +104,8 @@ export default Component.extend({
       }
     },
     // TODO: do this in full screen mode also
-    updateActiveBrowser(browser) {
-      this.set('activeBrowser', browser);
+    updateSelectedBrowser(browser) {
+      this.set('selectedBrowser', browser);
     },
   },
 });
