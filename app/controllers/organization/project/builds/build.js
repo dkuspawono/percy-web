@@ -4,6 +4,12 @@ import {filterBy, alias} from '@ember/object/computed';
 import {computed} from '@ember/object';
 
 export default Controller.extend({
+  activeBrowser: alias('browsers.firstObject'),
+  _browsers: alias('model.browsers'),
+  browsers: computed('_browsers.@each.slug', function() {
+    return this.get('_browsers').sortBy('slug');
+  }),
+
   // set by initializeSnapshotOrdering
   snapshots: null,
   sortedSnapshots: computed('snapshots.[]', function() {

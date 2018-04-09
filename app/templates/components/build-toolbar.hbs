@@ -12,6 +12,16 @@
     </div>
   </div>
   {{trial-bar organization=organization}}
+  <div class="btn-toolbar">
+      <div class="btn-group">
+      {{#each browsers as |browser|}}
+        <button type="button"
+          class="btn btn-square {{if (eq browser.id activeBrowser.id) "is-active"}}"
+          {{!-- {{action updateSelectedBrowser browser}} --}}
+        ><i class="fa fa-{{browser.slug}}"></i></button>
+      {{/each}}
+    </div>
+  </div>
   <div class="flex align-center">
     {{approval-section
       build=build

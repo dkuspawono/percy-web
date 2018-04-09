@@ -24,14 +24,6 @@
   <div class="flex justify-end">
     <div class="btn-toolbar">
       <div class="btn-group">
-        {{#each browsers as |browser|}}
-          <button type="button"
-            class="btn btn-square {{if (eq browser.id selectedBrowser.id) "is-active"}}"
-            {{action updateSelectedBrowser browser}}
-          ><i class="fa fa-{{browser.slug}}"></i></button>
-        {{/each}}
-      </div>
-      <div class="btn-group">
         {{#basic-dropdown horizontalPosition='auto-right' preventScroll=true as |dropdown|}}
           <div class="dropdown {{if dropdown.isOpen 'is-visible'}}">
             {{#dropdown.trigger}}
