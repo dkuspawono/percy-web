@@ -1,7 +1,8 @@
 import DS from 'ember-data';
 import {equal} from '@ember/object/computed';
-import {alias, mapBy, max, sort, or} from '@ember/object/computed';
+import {alias, mapBy, max, sort, or, filterBy} from '@ember/object/computed';
 import {computed} from '@ember/object';
+import {BROWSER_FAMILY_SLUGS} from 'percy-web/models/browser-family';
 
 export const SNAPSHOT_APPROVED_STATE = 'approved';
 export const SNAPSHOT_UNAPPROVED_STATE = 'unreviewed';
@@ -65,6 +66,9 @@ export default DS.Model.extend({
 
   comparisonsSortedByWidth: sort('comparisons', 'widthSort'),
   widthSort: ['width'],
+
+  comparisonsForFirefox: filterBy('comparisons', 'browser.slug', BROWSER_FAMILY_SLUGS.firefox),
+  comparisonsForChrome: filterBy('comparisons', 'browser.slug', BROWSER_FAMILY_SLUGS.chrome),
 
   maxWidthComparisonWithDiff: computed('comparisonsSortedByWidth.[]', function() {
     return this.get('comparisonsSortedByWidth')

@@ -1,11 +1,15 @@
-export default function(snapshots) {
+export default function(snapshots, selectedBrowser) {
   let width = _maxWidthForSnapshots(snapshots);
 
   return snapshots.sort(function(a, b) {
     // Prioritize snapshots with diffs at any widths over snapshots with no diffs at any widths
 
-    let maxDiffRatioA = _maxDiffRatioAnyWidth(a.get('comparisons'));
-    let maxDiffRatioB = _maxDiffRatioAnyWidth(b.get('comparisons'));
+    let maxDiffRatioA = _maxDiffRatioAnyWidth(
+      a.get(`comparisonsFor${selectedBrowser.get('name')}`),
+    );
+    let maxDiffRatioB = _maxDiffRatioAnyWidth(
+      b.get(`comparisonsFor${selectedBrowser.get('name')}`),
+    );
 
     let aHasDiffs = maxDiffRatioA > 0;
     let bHasDiffs = maxDiffRatioB > 0;
@@ -20,8 +24,8 @@ export default function(snapshots) {
     }
 
     // Next prioritize snapshots with comparisons at the current width
-    let comparisonForA = _comparisonAtCurrentWidth(a, width);
-    let comparisonForB = _comparisonAtCurrentWidth(b, width);
+    let comparisonForA = _comparisonAtCurrentWidth(a, width, selectedBrowser);
+    let comparisonForB = _comparisonAtCurrentWidth(b, width, selectedBrowser);
 
     let aHasNoComparisonAtWidth = !comparisonForA;
     let bHasNoComparisonAtWidth = !comparisonForB;
@@ -45,8 +49,8 @@ function _maxWidthForSnapshots(snapshots) {
   return Math.max(...snapshots.mapBy('maxComparisonWidth'));
 }
 
-function _comparisonAtCurrentWidth(snapshot, width) {
-  return snapshot.get('comparisons').findBy('width', width);
+function _comparisonAtCurrentWidth(snapshot, width, selectedBrowser) {
+  return snapshot.get(`comparisonsFor${selectedBrowser.get('name')}`).findBy('width', width);
 }
 
 function _maxDiffRatioAnyWidth(comparisons) {

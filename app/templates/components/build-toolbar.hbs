@@ -16,7 +16,7 @@
       <div class="btn-group">
       {{#each browsers as |browser|}}
         <button type="button"
-          class="btn btn-square {{if (eq browser.id activeBrowser.id) "is-active"}}"
+          class="btn btn-square {{if (eq browser.id selectedBrowser.id) "is-active"}}"
           {{!-- {{action updateSelectedBrowser browser}} --}}
         ><i class="fa fa-{{browser.slug}}"></i></button>
       {{/each}}

@@ -18,6 +18,8 @@ export default DS.Model.extend({
   diffImage: DS.belongsTo('image', {async: false}),
   diffRatio: DS.attr('number'),
 
+  browser: DS.belongsTo('browser', {async: false}),
+
   startedProcessingAt: DS.attr('date'),
   finishedProcessingAt: DS.attr('date'),
   processingDurationSeconds: computed('startedProcessingAt', 'finishedProcessingAt', function() {
