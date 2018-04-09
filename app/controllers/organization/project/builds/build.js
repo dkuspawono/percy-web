@@ -1,10 +1,12 @@
 import Controller from '@ember/controller';
 import snapshotSort from 'percy-web/lib/snapshot-sort';
-import {filterBy, alias} from '@ember/object/computed';
+import {filterBy, alias, or} from '@ember/object/computed';
 import {computed} from '@ember/object';
 
 export default Controller.extend({
-  selectedBrowser: alias('browsers.firstObject'),
+  defaultBrowser: alias('browsers.firstObject'),
+  chosenBrowser: null,
+  selectedBrowser: or('chosenBrowser', 'defaultBrowser'),
   _browsers: alias('model.browsers'),
   browsers: computed('_browsers.@each.slug', function() {
     return this.get('_browsers').sortBy('slug');
@@ -37,11 +39,18 @@ export default Controller.extend({
       this.get('snapshotsUnreviewed'),
       this.get('snapshotsApproved'),
     );
+
     this.set('snapshotsChanged', orderedSnapshots);
 
     const numSnapshotsMissing = this.get('model.totalSnapshots') - snapshots.get('length');
     this.set('numSnapshotsMissing', numSnapshotsMissing);
 
     this.set('isSnapshotsLoading', false);
+  },
+
+  actions: {
+    updateSelectedBrowser(newBrowser) {
+      this.set('chosenBrowser', newBrowser);
+    },
   },
 });

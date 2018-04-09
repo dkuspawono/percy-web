@@ -29,10 +29,14 @@ export default Component.extend({
     'snapshotSelectedWidth',
     'selectedBrowser',
     function() {
-      return (
-        this.get('snapshot').comparisonForWidth(this.get('snapshotSelectedWidth')) ||
-        this.get('snapshot.widestComparison')
+      const comparisonsForBrowser = this.get(
+        `snapshot.comparisonsFor${this.get('selectedBrowser.name')}`,
       );
+      const comparisonForWidth = comparisonsForBrowser.findBy(
+        'width',
+        this.get('snapshotSelectedWidth'),
+      );
+      return comparisonForWidth || this.get('snapshot.widestComparison');
     },
   ),
 
