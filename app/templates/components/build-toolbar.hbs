@@ -13,14 +13,16 @@
   </div>
   {{trial-bar organization=organization}}
   <div class="btn-toolbar">
+    {{#if (gt browsers.length 1)}}
       <div class="btn-group">
-      {{#each browsers as |browser|}}
-        <button type="button"
-          class="btn btn-square {{if (eq browser.id selectedBrowser.id) "is-active"}}"
-          {{action updateSelectedBrowser browser}}
-        ><i class="fa fa-{{browser.slug}}"></i></button>
-      {{/each}}
-    </div>
+        {{#each browsers as |browser|}}
+          <button type="button"
+            class="btn btn-square {{if (eq browser.id selectedBrowser.id) "is-active"}}"
+            {{action updateSelectedBrowser browser}}
+          ><i class="fa fa-{{browser.slug}}"></i></button>
+        {{/each}}
+      </div>
+    {{/if}}
   </div>
   <div class="flex align-center">
     {{approval-section
