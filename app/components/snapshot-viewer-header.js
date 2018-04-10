@@ -28,10 +28,14 @@ export default Component.extend({
   expandSnapshot() {},
   updateComparisonMode() {},
 
+  comparisonsForBrowser: computed('snapshot.@each.comparisons', function() {
+    return this.get(`snapshot.comparisonsFor${this.get('selectedBrowser.value.name')}`);
+  }),
+
   isShowingFilteredComparisons: true,
   isNotShowingFilteredComparisons: not('isShowingFilteredComparisons'),
-  comparisons: alias('snapshot.comparisons'),
-  comparisonsWithDiffs: filterBy('snapshot.comparisons', 'isDifferent'),
+  comparisons: alias('comparisonsForBrowser'),
+  comparisonsWithDiffs: filterBy('comparisons', 'isDifferent'),
   isShowingAllComparisons: or('noComparisonsHaveDiffs', 'isNotShowingFilteredComparisons'),
   noComparisonsHaveDiffs: equal('comparisonsWithDiffs.length', 0),
   allComparisonsHaveDiffs: computed('comparisons.[]', 'comparisonsWithDiffs.[]', function() {
