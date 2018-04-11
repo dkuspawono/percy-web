@@ -28,10 +28,6 @@ export default Component.extend({
   isShowingFilteredComparisons: true,
   isNotShowingFilteredComparisons: not('isShowingFilteredComparisons'),
   comparisons: alias('snapshot.comparisons'),
-  // comparisonsWithDiffs: computed('snapshot.comparisons', function() {
-  //   this.get('snapshot')
-  //   debugger;
-  // }),
   comparisonsWithDiffs: filterBy('snapshot.comparisons', 'isDifferent'),
   isShowingAllComparisons: or('noComparisonsHaveDiffs', 'isNotShowingFilteredComparisons'),
   noComparisonsHaveDiffs: equal('comparisonsWithDiffs.length', 0),

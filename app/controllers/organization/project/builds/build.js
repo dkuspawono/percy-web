@@ -1,8 +1,8 @@
 import Controller from '@ember/controller';
 import snapshotSort from 'percy-web/lib/snapshot-sort';
-import {filterBy, alias, or, sort, max, mapBy} from '@ember/object/computed';
+import {filterBy, alias, or} from '@ember/object/computed';
 import {computed} from '@ember/object';
-import ObjectProxy from '@ember/object/proxy';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 export default Controller.extend({
   isHidingBuildContainer: false,
@@ -19,10 +19,7 @@ export default Controller.extend({
     'snapshots.comparisons',
     'activeBrowser.id',
     function() {
-      console.log('recalculating sort')
-      if (!this.get('snapshots')) {
-        return [];
-      }
+      if (!this.get('snapshots')) return [];
 
       const browserSnapshots = this.get('snapshots').map(snapshot => {
         return browserSnapshot.create({
@@ -30,6 +27,7 @@ export default Controller.extend({
           activeBrowser: this.get('activeBrowser'),
         });
       });
+
       return snapshotSort(browserSnapshots);
     },
   ),
@@ -67,29 +65,3 @@ export default Controller.extend({
     },
   },
 });
-
-const browserSnapshot = ObjectProxy.extend({
-  content: null,
-  activeBrowser: null,
-  _allComparisons: alias('content.comparisons'),
-  // _comparisons: alias('comparisons'),
-  comparisons: computed('_allComparisons.@each.browser', 'activeBrowser.id', function() {
-    return this.get('_allComparisons').filterBy('browser.id', this.get('activeBrowser.id'));
-  }),
-  // comparisons: snapshot.get('comparisons').filterBy('browser.id', 'activeBrowser.id'),
-
-  comparisonWidths: mapBy('comparisons', 'width'),
-  comparisonForWidth(width) {
-    return this.get('comparisons').findBy('width', parseInt(width, 10));
-  },
-  comparisonsSortedByWidth: sort('comparisons', 'widthSort'),
-  widthSort: ['width'],
-  widestComparison: alias('comparisonsSortedByWidth.lastObject'),
-  maxComparisonWidth: max('comparisonWidths'),
-  maxWidthComparisonWithDiff: computed('comparisonsSortedByWidth.[]', function() {
-    return this.get('comparisonsSortedByWidth')
-      .filterBy('isDifferent')
-      .get('lastObject');
-  }),
-  maxComparisonWidthWithDiff: alias('maxWidthComparisonWithDiff.width'),
-})

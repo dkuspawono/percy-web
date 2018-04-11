@@ -2,6 +2,7 @@ import DS from 'ember-data';
 import {equal} from '@ember/object/computed';
 import {alias, mapBy, max, sort, or} from '@ember/object/computed';
 import {computed} from '@ember/object';
+import ObjectProxy from '@ember/object/proxy';
 
 export const SNAPSHOT_APPROVED_STATE = 'approved';
 export const SNAPSHOT_UNAPPROVED_STATE = 'unreviewed';
@@ -58,22 +59,29 @@ export default DS.Model.extend({
 
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date'),
+});
+
+export const browserSnapshot = ObjectProxy.extend({
+  content: null,
+  activeBrowser: null,
+
+  _allComparisons: alias('content.comparisons'),
+  comparisons: computed('_allComparisons.@each.browser', 'activeBrowser.id', function() {
+    return this.get('_allComparisons').filterBy('browser.id', this.get('activeBrowser.id'));
+  }),
 
   comparisonWidths: mapBy('comparisons', 'width'),
-  maxComparisonWidth: max('comparisonWidths'),
-  widestComparison: alias('comparisonsSortedByWidth.lastObject'),
-
+  comparisonForWidth(width) {
+    return this.get('comparisons').findBy('width', parseInt(width, 10));
+  },
   comparisonsSortedByWidth: sort('comparisons', 'widthSort'),
   widthSort: ['width'],
-
+  widestComparison: alias('comparisonsSortedByWidth.lastObject'),
+  maxComparisonWidth: max('comparisonWidths'),
   maxWidthComparisonWithDiff: computed('comparisonsSortedByWidth.[]', function() {
     return this.get('comparisonsSortedByWidth')
       .filterBy('isDifferent')
       .get('lastObject');
   }),
   maxComparisonWidthWithDiff: alias('maxWidthComparisonWithDiff.width'),
-
-  comparisonForWidth(width) {
-    return this.get('comparisons').findBy('width', parseInt(width, 10));
-  },
 });
