@@ -11,11 +11,24 @@ export default Factory.extend({
   totalSnapshotsUnreviewed: 3,
   totalComparisonsDiff: 8,
   totalComparisonsFinished: 12,
+
   createdAt() {
     return moment();
   },
   buildNumber(i) {
     return i + 1;
+  },
+
+  afterCreate(build, server) {
+// +    const browser = server.create('browser');
+// +    browser.update('browserFamily', server.create('browserFamily'));
+// +    browser.save();
+// +    build.update('browsers', [browser]);
+
+    const browser = server.create('browser');
+    // browser.update('browserFamily', server.create('browserFamily'));
+    // browser.save();
+    build.update('browsers', [browser]);
   },
 
   approved: trait({

@@ -3,6 +3,7 @@ import {alias, lt, mapBy} from '@ember/object/computed';
 import {computed} from '@ember/object';
 import Component from '@ember/component';
 import {inject as service} from '@ember/service';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 export default Component.extend({
   classNames: ['SnapshotList'],
@@ -36,7 +37,15 @@ export default Component.extend({
       this.get('snapshotQuery')
         .getUnchangedSnapshots(this.get('build'))
         .then(snapshots => {
-          this.set('snapshotsUnchanged', snapshots);
+          this.set(
+            'snapshotsUnchanged',
+            snapshots.map(snapshot => {
+              return browserSnapshot.create({
+                content: snapshot,
+                activeBrowser: this.get('activeBrowser'),
+              });
+            }),
+          );
           this.toggleProperty('isUnchangedSnapshotsVisible');
         })
         .finally(() => {

@@ -16,6 +16,9 @@ export default Factory.extend({
   finishedProcessingAt() {
     return moment().subtract(23, 'seconds');
   },
+  browser() {
+    return server.create('browser');
+  },
 
   width: TEST_IMAGE_DIMS.DEFAULT_WIDTH,
   diffRatio: HIGH_DIFF_RATIO,

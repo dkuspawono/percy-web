@@ -27,7 +27,7 @@ export default Controller.extend({
           activeBrowser: this.get('activeBrowser'),
         });
       });
-
+      debugger;
       return snapshotSort(browserSnapshots);
     },
   ),
