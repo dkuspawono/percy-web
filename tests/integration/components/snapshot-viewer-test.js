@@ -12,6 +12,7 @@ import {resolve} from 'rsvp';
 import {SNAPSHOT_APPROVED_STATE, SNAPSHOT_UNAPPROVED_STATE} from 'percy-web/models/snapshot';
 import wait from 'ember-test-helpers/wait';
 import setupFactoryGuy from 'percy-web/tests/helpers/setup-factory-guy';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 describe('Integration: SnapshotViewer', function() {
   setupComponentTest('snapshot-viewer', {
@@ -30,9 +31,12 @@ describe('Integration: SnapshotViewer', function() {
     showSnapshotFullModalTriggeredStub = sinon.stub();
     createReviewStub = sinon.stub().returns(resolve());
     snapshotTitle = 'Awesome snapshot title';
-    snapshot = make('snapshot', 'withComparisons', {name: snapshotTitle});
     const build = make('build', 'finished');
-    build.set('snapshots', [snapshot]);
+    snapshot = browserSnapshot.create({
+      content: make('snapshot', 'withComparisons', {name: snapshotTitle, build}),
+      activeBrowser: make('browser'),
+    });
+
     const stub = sinon.stub();
 
     this.setProperties({
@@ -117,7 +121,12 @@ describe('Integration: SnapshotViewer', function() {
     });
 
     it('shows widest width with diff as active by default when no comparisons have diffs', function() { // eslint-disable-line
-      const snapshot = make('snapshot', 'withNoDiffs');
+      const _snapshot = make('snapshot', 'withNoDiffs');
+      const snapshot = browserSnapshot.create({
+        content: _snapshot,
+        activeBrowser: make('browser'),
+      });
+
       this.set('snapshot', snapshot);
 
       this.render(hbs`{{snapshot-viewer

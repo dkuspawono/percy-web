@@ -26,7 +26,7 @@ export default Component.extend({
     }
 
     this.set('isLoading', true);
-    this.get('createReview')(this.get('approvableSnapshots')).finally(() => {
+    this.get('createReview')(this.get('approvableSnapshots').mapBy('content')).finally(() => {
       this.set('isLoading', false);
     });
   },

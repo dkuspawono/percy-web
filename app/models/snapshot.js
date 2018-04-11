@@ -67,7 +67,7 @@ export const browserSnapshot = ObjectProxy.extend({
 
   _allComparisons: alias('content.comparisons'),
   comparisons: computed('_allComparisons.@each.browser', 'activeBrowser.id', function() {
-    return this.get('_allComparisons').filterBy('browser.id', this.get('activeBrowser.id'));
+    return this.get('_allComparisons').filterBy('browser.slug', this.get('activeBrowser.slug'));
   }),
 
   comparisonWidths: mapBy('comparisons', 'width'),

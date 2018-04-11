@@ -9,6 +9,7 @@ import sinon from 'sinon';
 import {resolve} from 'rsvp';
 import FullSnapshotPage from 'percy-web/tests/pages/components/snapshot-viewer-full';
 import setupFactoryGuy from 'percy-web/tests/helpers/setup-factory-guy';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 describe('Integration: SnapshotViewerFull', function() {
   setupComponentTest('snapshot-viewer-full', {
@@ -28,12 +29,15 @@ describe('Integration: SnapshotViewerFull', function() {
     FullSnapshotPage.setContext(this);
 
     build = make('build', 'finished');
-    snapshot = make('snapshot', 'withComparisons', {
-      build,
-      name: snapshotTitle,
+    snapshot = browserSnapshot.create({
+      content: make('snapshot', 'withComparisons', {build, name: snapshotTitle}),
+      activeBrowser: make('browser'),
     });
 
-    addedSnapshot = make('snapshot', 'new', {build});
+    addedSnapshot = browserSnapshot.create({
+      content: make('snapshot', 'new', {build}),
+      activeBrowser: make('browser'),
+    });
 
     closeSnapshotFullModalStub = sinon.stub();
     updateComparisonModeStub = sinon.stub();
@@ -151,7 +155,7 @@ describe('Integration: SnapshotViewerFull', function() {
   describe('approve snapshot button', function() {
     it('sends createReview with correct arguments when approve button is clicked', function() {
       FullSnapshotPage.header.clickApprove();
-      expect(createReviewStub).to.have.been.calledWith([snapshot]);
+      expect(createReviewStub).to.have.been.calledWith([snapshot.content]);
     });
 
     it('does not display when build is not finished', function() {
