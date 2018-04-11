@@ -8,13 +8,13 @@ export default Controller.extend({
   isHidingBuildContainer: false,
 
   _browsers: alias('build.browsers'),
-  defaultBrowser: alias('browsers.firstObject'),
+  defaultBrowser: alias('_browsers.firstObject'),
   chosenBrowser: null,
-  selectedBrowser: or('chosenBrowser', 'defaultBrowser'),
+  activeBrowser: or('chosenBrowser', 'defaultBrowser'),
 
   // set by initializeSnapshotOrdering
   snapshots: null,
-  sortedSnapshots: computed('snapshots.[]', function() {
+  sortedSnapshots: computed('snapshots.[]', 'snapshots.comparisons', 'activeBrowser.id', function() {
     if (!this.get('snapshots')) {
       return [];
     }
@@ -62,5 +62,14 @@ export default Controller.extend({
     this.set('numSnapshotsMissing', numSnapshotsMissing);
 
     this.set('isSnapshotsLoading', false);
+  },
+
+  actions: {
+    updateSelectedBrowser(newBrowser) {
+      console.log('switching browser')
+          console.log('default', this.get('defaultBrowser.slug'), 'chosen', this.get('chosenBrowser'))
+
+      this.set('chosenBrowser', newBrowser);
+    },
   },
 });
