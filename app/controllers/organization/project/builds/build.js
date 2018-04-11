@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import snapshotSort from 'percy-web/lib/snapshot-sort';
-import {filterBy, alias, or} from '@ember/object/computed';
+import {filterBy, alias, or, sort, max, mapBy} from '@ember/object/computed';
 import {computed} from '@ember/object';
 import ObjectProxy from '@ember/object/proxy';
 
@@ -14,29 +14,25 @@ export default Controller.extend({
 
   // set by initializeSnapshotOrdering
   snapshots: null,
-  sortedSnapshots: computed('snapshots.[]', 'snapshots.comparisons', 'activeBrowser.id', function() {
-    if (!this.get('snapshots')) {
-      return [];
-    }
+  sortedSnapshots: computed(
+    'snapshots.[]',
+    'snapshots.comparisons',
+    'activeBrowser.id',
+    function() {
+      console.log('recalculating sort')
+      if (!this.get('snapshots')) {
+        return [];
+      }
 
-    const browserSnapshot = ObjectProxy.extend({
-      content: null,
-      activeBrowser: null,
-      comparisons: filterBy('content.comparisons', 'browser.id', 'activeBrowser.id'),
-      comparisonForWidth(width) {
-        return this.get('comparisons').findBy('width', parseInt(width, 10));
-      },
-    });
-
-    const browserSnapshots = this.get('snapshots').map(snapshot => {
-      return browserSnapshot.create({
-        content: snapshot,
-        activeBrowser: this.get('selectedSnapshot'),
+      const browserSnapshots = this.get('snapshots').map(snapshot => {
+        return browserSnapshot.create({
+          content: snapshot,
+          activeBrowser: this.get('activeBrowser'),
+        });
       });
-    });
-    return snapshotSort(browserSnapshots);
-    // return snapshotSort(this.get('snapshots').toArray());
-  }),
+      return snapshotSort(browserSnapshots);
+    },
+  ),
   snapshotsUnreviewed: filterBy('sortedSnapshots', 'isUnreviewed', true),
   snapshotsApproved: filterBy('sortedSnapshots', 'isApprovedByUserEver', true),
 
@@ -66,10 +62,34 @@ export default Controller.extend({
 
   actions: {
     updateSelectedBrowser(newBrowser) {
-      console.log('switching browser')
-          console.log('default', this.get('defaultBrowser.slug'), 'chosen', this.get('chosenBrowser'))
-
       this.set('chosenBrowser', newBrowser);
+      this.initializeSnapshotOrdering(this.get('snapshots'));
     },
   },
 });
+
+const browserSnapshot = ObjectProxy.extend({
+  content: null,
+  activeBrowser: null,
+  _allComparisons: alias('content.comparisons'),
+  // _comparisons: alias('comparisons'),
+  comparisons: computed('_allComparisons.@each.browser', 'activeBrowser.id', function() {
+    return this.get('_allComparisons').filterBy('browser.id', this.get('activeBrowser.id'));
+  }),
+  // comparisons: snapshot.get('comparisons').filterBy('browser.id', 'activeBrowser.id'),
+
+  comparisonWidths: mapBy('comparisons', 'width'),
+  comparisonForWidth(width) {
+    return this.get('comparisons').findBy('width', parseInt(width, 10));
+  },
+  comparisonsSortedByWidth: sort('comparisons', 'widthSort'),
+  widthSort: ['width'],
+  widestComparison: alias('comparisonsSortedByWidth.lastObject'),
+  maxComparisonWidth: max('comparisonWidths'),
+  maxWidthComparisonWithDiff: computed('comparisonsSortedByWidth.[]', function() {
+    return this.get('comparisonsSortedByWidth')
+      .filterBy('isDifferent')
+      .get('lastObject');
+  }),
+  maxComparisonWidthWithDiff: alias('maxWidthComparisonWithDiff.width'),
+})
