@@ -48,6 +48,7 @@ export default Component.extend({
 
       this.sendAction(
         'transitionRouteToWidth',
+        this.get('snapshot.build'),
         this.get('snapshot'),
         value,
         this.get('comparisonMode'),
