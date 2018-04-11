@@ -1,10 +1,16 @@
 import Controller from '@ember/controller';
 import snapshotSort from 'percy-web/lib/snapshot-sort';
-import {filterBy, alias} from '@ember/object/computed';
+import {filterBy, alias, or} from '@ember/object/computed';
 import {computed} from '@ember/object';
+import ObjectProxy from '@ember/object/proxy';
 
 export default Controller.extend({
   isHidingBuildContainer: false,
+
+  _browsers: alias('build.browsers'),
+  defaultBrowser: alias('browsers.firstObject'),
+  chosenBrowser: null,
+  selectedBrowser: or('chosenBrowser', 'defaultBrowser'),
 
   // set by initializeSnapshotOrdering
   snapshots: null,
@@ -12,7 +18,24 @@ export default Controller.extend({
     if (!this.get('snapshots')) {
       return [];
     }
-    return snapshotSort(this.get('snapshots').toArray());
+
+    const browserSnapshot = ObjectProxy.extend({
+      content: null,
+      activeBrowser: null,
+      comparisons: filterBy('content.comparisons', 'browser.id', 'activeBrowser.id'),
+      comparisonForWidth(width) {
+        return this.get('comparisons').findBy('width', parseInt(width, 10));
+      },
+    });
+
+    const browserSnapshots = this.get('snapshots').map(snapshot => {
+      return browserSnapshot.create({
+        content: snapshot,
+        activeBrowser: this.get('selectedSnapshot'),
+      });
+    });
+    return snapshotSort(browserSnapshots);
+    // return snapshotSort(this.get('snapshots').toArray());
   }),
   snapshotsUnreviewed: filterBy('sortedSnapshots', 'isUnreviewed', true),
   snapshotsApproved: filterBy('sortedSnapshots', 'isApprovedByUserEver', true),
