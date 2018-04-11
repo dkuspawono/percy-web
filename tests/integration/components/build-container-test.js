@@ -9,6 +9,7 @@ import DS from 'ember-data';
 import {defer} from 'rsvp';
 import BuildPage from 'percy-web/tests/pages/build-page';
 import setupFactoryGuy from 'percy-web/tests/helpers/setup-factory-guy';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 describe('Integration: BuildContainer', function() {
   setupComponentTest('build-container', {
@@ -95,8 +96,15 @@ describe('Integration: BuildContainer', function() {
 
   it('displays snapshots when build is finished', function() {
     const build = make('build', 'finished');
-    const diffSnapshot = make('snapshot', 'withComparisons', {build});
-    const sameSnapshot = make('snapshot', 'withNoDiffs', {build});
+    const diffSnapshot = browserSnapshot.create({
+      content: make('snapshot', 'withComparisons', {build}),
+      activeBrowser: make('browser'),
+    });
+    const sameSnapshot = browserSnapshot.create({
+      content: make('snapshot', 'withNoDiffs', {build}),
+      activeBrowser: make('browser'),
+    });
+
     const stub = sinon.stub();
     this.setProperties({
       build,

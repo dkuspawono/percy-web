@@ -10,6 +10,7 @@ import sinon from 'sinon';
 import {resolve, defer} from 'rsvp';
 import SnapshotApprovalButton from 'percy-web/tests/pages/components/snapshot-approval-button';
 import setupFactoryGuy from 'percy-web/tests/helpers/setup-factory-guy';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 describe('Integration: SnapshotApprovalButton', function() {
   setupComponentTest('snapshot-approval-button', {
@@ -22,7 +23,7 @@ describe('Integration: SnapshotApprovalButton', function() {
   beforeEach(function() {
     setupFactoryGuy(this.container);
     SnapshotApprovalButton.setContext(this);
-    snapshot = make('snapshot');
+    snapshot = browserSnapshot.create({content: make('snapshot'), browser: make('browser')});
     createReview = sinon.stub().returns(resolve());
     this.setProperties({snapshot, createReview});
   });
@@ -51,7 +52,7 @@ describe('Integration: SnapshotApprovalButton', function() {
     }}`);
     SnapshotApprovalButton.clickButton();
 
-    expect(createReview).to.have.been.calledWith([snapshot]);
+    expect(createReview).to.have.been.calledWith([snapshot.get('content')]);
   });
 
   it('displays correctly when in loading state ', function() {

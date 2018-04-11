@@ -12,6 +12,7 @@ import wait from 'ember-test-helpers/wait';
 import setupFactoryGuy from 'percy-web/tests/helpers/setup-factory-guy';
 import Service from '@ember/service';
 import {resolve, defer} from 'rsvp';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 describe('Integration: SnapshotList', function() {
   setupComponentTest('snapshot-list', {
@@ -19,10 +20,12 @@ describe('Integration: SnapshotList', function() {
   });
 
   let snapshotQueryServiceStub;
+  let firefox;
 
   beforeEach(function() {
     setupFactoryGuy(this.container);
     SnapshotList.setContext(this);
+    firefox = make('browser');
   });
 
   function _mockSessionQueryFetches(context, snapshotsUnchanged, snapshotsChanged) {
@@ -101,7 +104,11 @@ describe('Integration: SnapshotList', function() {
       const stub = sinon.stub();
       const build = make('build', 'finished');
 
-      const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build});
+      const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build}).map(
+        snapshot => {
+          return browserSnapshot.create({content: snapshot, activeBrowser: firefox});
+        },
+      );
       this.set('snapshotsChanged', snapshotsChanged);
 
       this.setProperties({
@@ -160,9 +167,15 @@ describe('Integration: SnapshotList', function() {
       const build = make('build', 'finished');
 
       const numSnapshotsUnchanged = 3;
-      const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build});
+      const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build}).map(
+        snapshot => {
+          return browserSnapshot.create({content: snapshot, activeBrowser: firefox});
+        },
+      );
       const snapshotsUnchanged = makeList('snapshot', numSnapshotsUnchanged, 'withNoDiffs', {
         build,
+      }).map(snapshot => {
+        return browserSnapshot.create({content: snapshot, activeBrowser: firefox});
       });
       _mockSessionQueryFetches(this, snapshotsUnchanged);
 
@@ -173,6 +186,7 @@ describe('Integration: SnapshotList', function() {
         numSnapshotsUnchanged,
         stub,
         isKeyboardNavEnabled: true,
+        activeBrowser: firefox,
       });
 
       this.render(hbs`{{snapshot-list
@@ -182,13 +196,13 @@ describe('Integration: SnapshotList', function() {
         createReview=stub
         showSnapshotFullModalTriggered=stub
         isKeyboardNavEnabled=isKeyboardNavEnabled
+        activeBrowser=activeBrowser
       }}`);
     });
 
     it('automatically expands collapsed snapshots if focused', function() {
       // Open the collapsed no-diff snapshots
       SnapshotList.clickToggleNoDiffsSection();
-
       const firstNoDiffSnapshot = SnapshotList.snapshots(3);
       const secondNoDiffSnapshot = SnapshotList.snapshots(4);
       const thirdNoDiffSnapshot = SnapshotList.snapshots(5);

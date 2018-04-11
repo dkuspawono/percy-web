@@ -288,6 +288,7 @@ describe('Acceptance: Fullscreen Snapshot', function() {
       snapshotId: snapshot.id,
       width: snapshot.comparisons.models[0].width,
       mode: 'diff',
+      activeBrowserSlug: 'firefox',
     };
   });
 

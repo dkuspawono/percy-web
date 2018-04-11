@@ -20,14 +20,7 @@ export default Factory.extend({
   },
 
   afterCreate(build, server) {
-// +    const browser = server.create('browser');
-// +    browser.update('browserFamily', server.create('browserFamily'));
-// +    browser.save();
-// +    build.update('browsers', [browser]);
-
     const browser = server.create('browser');
-    // browser.update('browserFamily', server.create('browserFamily'));
-    // browser.save();
     build.update('browsers', [browser]);
   },
 

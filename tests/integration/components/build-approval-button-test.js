@@ -11,6 +11,7 @@ import {resolve, defer} from 'rsvp';
 import BuildApprovalButton from 'percy-web/tests/pages/components/build-approval-button';
 import setupFactoryGuy from 'percy-web/tests/helpers/setup-factory-guy';
 import {getOwner} from '@ember/application';
+import {browserSnapshot} from 'percy-web/models/snapshot';
 
 describe('Integration: BuildApprovalButton', function() {
   setupComponentTest('build-approval-button', {
@@ -18,13 +19,21 @@ describe('Integration: BuildApprovalButton', function() {
   });
 
   let build;
+  let approvableSnapshots;
 
   beforeEach(function() {
     setupFactoryGuy(this.container);
     BuildApprovalButton.setContext(this);
-    build = make('build', {snapshots: makeList('snapshot', 4)});
+    build = make('build');
+    approvableSnapshots = makeList('snapshot', 4, 'withComparisons', {build}).map(snapshot => {
+      return browserSnapshot.create({
+        content: snapshot,
+        activeBrowser: make('browser'),
+      });
+    });
+
     const stub = sinon.stub().returns(resolve());
-    this.setProperties({build, stub});
+    this.setProperties({build, stub, approvableSnapshots});
   });
 
   it('displays correctly when build is not approved ', function() {
@@ -50,9 +59,7 @@ describe('Integration: BuildApprovalButton', function() {
     let createReviewStub = sinon.stub().returns(resolve({then: sinon.stub()}));
     this.setProperties({
       createReviewStub,
-      approvableSnapshots: build.get('snapshots'),
     });
-
     this.render(hbs`{{build-approval-button
       build=build
       createReview=createReviewStub
@@ -60,7 +67,7 @@ describe('Integration: BuildApprovalButton', function() {
     }}`);
     BuildApprovalButton.clickButton();
 
-    expect(createReviewStub).to.have.been.calledWith(build.get('snapshots'));
+    expect(createReviewStub).to.have.been.calledWith(approvableSnapshots.mapBy('content'));
   });
 
   it('does not call createReview if build is already approved', function() {
@@ -111,6 +118,7 @@ describe('Integration: BuildApprovalButton', function() {
     this.render(hbs`{{build-approval-button
       build=build
       createReview=createReviewStub
+      approvableSnapshots=approvableSnapshots
     }}`);
 
     BuildApprovalButton.clickButton();

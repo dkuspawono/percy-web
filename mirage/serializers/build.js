@@ -1,14 +1,7 @@
 import {JSONAPISerializer} from 'ember-cli-mirage';
 
 export default JSONAPISerializer.extend({
-  include: [
-    'project',
-    'repo',
-    'approvedBy',
-    'commit',
-    'baseBuild',
-    'browsers',
-  ],
+  include: ['project', 'repo', 'approvedBy', 'commit', 'baseBuild', 'browsers'],
   links(build) {
     return {
       snapshots: {
