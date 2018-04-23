@@ -3916,9 +3916,9 @@ ember-inflector@^2.0.0:
   dependencies:
     ember-cli-babel "^6.0.0"
 
-ember-inflector@^2.0.1:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ember-inflector/-/ember-inflector-2.2.0.tgz#edd273dfd1a29be27f14b195e2f0ed70e812d9e0"
+ember-inflector@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/ember-inflector/-/ember-inflector-2.3.0.tgz#94797eba0eea98d902aa1e5da0f0aeef6053317f"
   dependencies:
     ember-cli-babel "^6.0.0"
 
