@@ -4549,6 +4549,10 @@ eventemitter3@1.x.x:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-1.2.0.tgz#1c86991d816ad1e504750e73874224ecf3bec508"
 
+eventemitter3@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.0.1.tgz#4ce66c3fc5b5a6b9f2245e359e1938f1ab10f960"
+
 events-to-array@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/events-to-array/-/events-to-array-1.1.2.tgz#2d41f563e1fe400ed4962fe1a4d5c6a7539df7f6"
@@ -4973,6 +4977,12 @@ flat-cache@^1.2.1:
 flow-parser@^0.*:
   version "0.59.0"
   resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.59.0.tgz#f6ebcae61ffa187e420999d40ce0a801f39b2635"
+
+follow-redirects@^1.0.0:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.4.1.tgz#d8120f4518190f55aac65bb6fc7b85fcd666d6aa"
+  dependencies:
+    debug "^3.1.0"
 
 font-awesome@^4.7.0:
   version "4.7.0"
@@ -5623,12 +5633,20 @@ http-parser-js@>=0.4.0:
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/http-parser-js/-/http-parser-js-0.4.9.tgz#ea1a04fb64adff0242e9974f297dd4c3cad271e1"
 
-http-proxy@^1.13.1, http-proxy@^1.16.2, http-proxy@^1.9.0:
+http-proxy@^1.13.1, http-proxy@^1.9.0:
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/http-proxy/-/http-proxy-1.16.2.tgz#06dff292952bf64dbe8471fa9df73066d4f37742"
   dependencies:
     eventemitter3 "1.x.x"
     requires-port "1.x.x"
+
+http-proxy@^1.17.0:
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/http-proxy/-/http-proxy-1.17.0.tgz#7ad38494658f84605e2f6db4436df410f4e5be9a"
+  dependencies:
+    eventemitter3 "^3.0.0"
+    follow-redirects "^1.0.0"
+    requires-port "^1.0.0"
 
 http-signature@~1.1.0:
   version "1.1.1"
@@ -9198,7 +9216,7 @@ require-uncached@^1.0.3:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-requires-port@1.x.x:
+requires-port@1.x.x, requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
 

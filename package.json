@@ -90,7 +90,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "glob": "^7.1.2",
-    "http-proxy": "^1.16.2",
+    "http-proxy": "^1.17.0",
     "husky": "^0.14.3",
     "lint-staged": "^7.0.4",
     "loader.js": "^4.7.0",
