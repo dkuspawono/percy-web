@@ -4,18 +4,31 @@
       <div class="ComparisonViewer-halfColumn ComparisonViewer-halfColumn--left">
         {{#with comparison.baseScreenshot.lossyImage as |image|}}
           <div class="Viewer-pdiffImageBox" style={{html-safe "max-width: " image.width "px"}}>
-            {{image-spacer image=image imageClass="ComparisonViewer-pdiffImage"}}
+            {{image-spacer
+              image=image
+              imageClass="ComparisonViewer-pdiffImage"
+              deferredImageLoading=shouldDeferImageLoading
+            }}
           </div>
         {{/with}}
       </div>
       <div class="ComparisonViewer-halfColumn ComparisonViewer-halfColumn--right">
         {{#with comparison.headScreenshot.lossyImage as |lossyImage|}}
           <div class="Viewer-pdiffImageBox Viewer-pdiffImageBox--actionable" style={{html-safe "max-width: " lossyImage.width "px"}} data-test-comparison-viewer-diff-image-container>
-            {{image-spacer action=(action "toggleOverlay") image=lossyImage imageClass="ComparisonViewer-pdiffImage ComparisonViewer-pdiffImage--actionable"}}
+            {{image-spacer
+              action=(action "toggleOverlay")
+              image=lossyImage
+              imageClass="ComparisonViewer-pdiffImage ComparisonViewer-pdiffImage--actionable"
+              deferredImageLoading=shouldDeferImageLoading
+              }}
             {{#if showDiffOverlay}}
               {{#with comparison.diffImage as |diffImage|}}
                 <div class="pdiffImageOverlay" data-test-comparison-viewer-full-diff-image-overlay>
-                  {{image-spacer action=(action "toggleOverlay") image=diffImage imageClass="Viewer-pdiffImageOverlay"}}
+                  {{image-spacer
+                    image=diffImage
+                    imageClass="Viewer-pdiffImageOverlay"
+                    action=(action "toggleOverlay")
+                  }}
                 </div>
               {{/with}}
             {{/if}}
@@ -64,7 +77,11 @@
       <div class="ComparisonViewer-halfColumn ComparisonViewer-halfColumn--right">
         {{#with comparison.headScreenshot.lossyImage as |image|}}
           <div class="Viewer-pdiffImageBox" style={{html-safe "max-width: " image.width "px"}}>
-            {{image-spacer image=image imageClass="ComparisonViewer-pdiffImage"}}
+            {{image-spacer
+              image=image
+              imageClass="ComparisonViewer-pdiffImage"
+              deferredImageLoading=shouldDeferImageLoading
+            }}
           </div>
         {{/with}}
       </div>
