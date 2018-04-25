@@ -5,6 +5,7 @@ export default Component.extend({
   // Arguments:
   comparison: null,
   allDiffsShown: null,
+  shouldDeferImageLoading: null,
 
   // State:
   classNames: ['ComparisonViewer bg-gray-000 border-bottom border-gray-100'],
