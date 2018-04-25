@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {alias, lt, mapBy} from '@ember/object/computed';
+import {alias, gt, mapBy} from '@ember/object/computed';
 import {computed} from '@ember/object';
 import Component from '@ember/component';
 import {inject as service} from '@ember/service';
@@ -33,7 +33,7 @@ export default Component.extend({
   snapshotsUnchanged: null,
   activeSnapshotId: null,
 
-  isDefaultExpanded: lt('snapshotsChanged.length', 150),
+  shouldDeferImageLoading: gt('snapshotsChanged.length', 150),
 
   actions: {
     updateActiveSnapshotId(newSnapshotId) {

@@ -55,13 +55,12 @@ export default Component.extend({
     this.set('_shouldScroll', true);
   }),
 
-  isDefaultExpanded: true,
   isFocus: alias('isActiveSnapshot'),
   isExpanded: or('isUserExpanded', '_isDefaultExpanded'),
   isUserExpanded: false,
 
   _isDefaultExpanded: computed(
-    'isDefaultExpanded',
+    'shouldDeferImageLoading',
     'snapshot.isApproved',
     'build.isApproved',
     'isActiveSnapshot',
@@ -71,7 +70,7 @@ export default Component.extend({
       } else if (this.get('snapshot.isApproved')) {
         return false;
       } else {
-        return this.get('isDefaultExpanded');
+        return true;
       }
     },
   ),
