@@ -24,21 +24,36 @@ export default Factory.extend({
   width: TEST_IMAGE_DIMS.DEFAULT_WIDTH,
   diffRatio: HIGH_DIFF_RATIO,
 
-  default: trait({
-    afterCreate(comparison, server) {
-      const diffRatio = LOW_DIFF_RATIO;
-      const headScreenshot = server.create('screenshot', 'v2');
-      const baseScreenshot = server.create('screenshot', 'v1');
-      const diffImage = server.create('image', {url: TEST_IMAGE_URLS.DIFF_URL});
+  // default: trait({
+  //   afterCreate(comparison, server) {
+  //     const diffRatio = LOW_DIFF_RATIO;
+  //     const headScreenshot = server.create('screenshot', 'v2');
+  //     const baseScreenshot = server.create('screenshot', 'v1');
+  //     const diffImage = server.create('image', {url: TEST_IMAGE_URLS.DIFF_URL});
 
-      comparison.update({
-        diffRatio,
-        headScreenshot,
-        baseScreenshot,
-        diffImage,
-      });
-    },
-  }),
+  //     comparison.update({
+  //       diffRatio,
+  //       headScreenshot,
+  //       baseScreenshot,
+  //       diffImage,
+  //     });
+  //   },
+  // }),
+  afterCreate(comparison, server) {
+    const diffRatio = LOW_DIFF_RATIO;
+    const headScreenshot = server.create('screenshot', 'v2');
+    const baseScreenshot = server.create('screenshot', 'v1');
+    const diffImage = server.create('image', {url: TEST_IMAGE_URLS.DIFF_URL});
+    const browser = server.create('browser');
+
+    comparison.update({
+      diffRatio,
+      headScreenshot,
+      baseScreenshot,
+      diffImage,
+      browser,
+    });
+  },
 
   same: trait({
     afterCreate(comparison, server) {
