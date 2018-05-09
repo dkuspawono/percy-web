@@ -1,7 +1,7 @@
 import {setProperties} from '@ember/object';
 import {htmlSafe} from '@ember/string';
 import {computed} from '@ember/object';
-import {not, or} from '@ember/object/computed';
+import {not, or, alias} from '@ember/object/computed';
 import Component from '@ember/component';
 import InViewportMixin from 'ember-in-viewport';
 
@@ -17,7 +17,7 @@ export default Component.extend(InViewportMixin, {
   immediateImageLoading: not('deferredImageLoading'),
 
   // Whether or not the curent image is in the viewport.
-  inViewport: false,
+  inViewport: alias('viewportEntered'),
 
   // We should load the image (ie. render the <img> tag) if deferred mode is off, or the image
   // is in the viewport.
@@ -45,14 +45,6 @@ export default Component.extend(InViewportMixin, {
         right: 0,
       },
     });
-  },
-
-  didEnterViewport() {
-    this.set('inViewport', true);
-  },
-
-  didExitViewport() {
-    this.set('inViewport', false);
   },
 
   click(e) {
