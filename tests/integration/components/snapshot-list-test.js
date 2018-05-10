@@ -120,36 +120,13 @@ describe('Integration: SnapshotList', function() {
       }}`);
     });
 
-    it('collapses all snapshots by default', function() {
+    it('lazy loads comparison images', function() {
       expect(SnapshotList.snapshots().count).to.equal(numSnapshots);
       SnapshotList.snapshots().forEach(snapshot => {
-        expect(snapshot.isCollapsed).to.equal(true);
+        expect(snapshot.isBaseLoadingSpinnerPresent).to.equal(true);
+        expect(snapshot.isHeadLoadingSpinnerPresent).to.equal(true);
       });
       percySnapshot(this.test);
-    });
-
-    it('allows keyboard nav with up and down arrows', function() {
-      SnapshotList.typeDownArrow();
-      wait();
-      expect(SnapshotList.snapshots(0).isExpanded).to.equal(true);
-      expect(SnapshotList.snapshots(0).isFocused).to.equal(true);
-      expect(SnapshotList.snapshots(1).isExpanded).to.equal(false);
-      expect(SnapshotList.snapshots(1).isFocused).to.equal(false);
-      percySnapshot(this.test);
-
-      SnapshotList.typeDownArrow();
-      wait();
-      expect(SnapshotList.snapshots(0).isExpanded).to.equal(false);
-      expect(SnapshotList.snapshots(0).isFocused).to.equal(false);
-      expect(SnapshotList.snapshots(1).isExpanded).to.equal(true);
-      expect(SnapshotList.snapshots(1).isFocused).to.equal(true);
-
-      SnapshotList.typeUpArrow();
-      wait();
-      expect(SnapshotList.snapshots(0).isExpanded).to.equal(true);
-      expect(SnapshotList.snapshots(0).isFocused).to.equal(true);
-      expect(SnapshotList.snapshots(1).isExpanded).to.equal(false);
-      expect(SnapshotList.snapshots(1).isFocused).to.equal(false);
     });
   });
 
