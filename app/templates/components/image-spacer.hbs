@@ -1,5 +1,5 @@
 {{#if shouldLoadImage}}
   {{simple-image image=image classes=imageClass}}
-{{else}}
+{{else if (not deferredImageLoading)}}
   {{loading-page}}
 {{/if}}
