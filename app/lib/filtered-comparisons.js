@@ -1,7 +1,7 @@
-import Object from '@ember/object';
-//TODO convert this file to use get(this,whatever) syntax
+import Object, {get, set} from '@ember/object';
+
 export function computeWidestComparison(comparisons) {
-  return comparisons.sortBy('width').get('lastObject');
+  return get(comparisons.sortBy('width'), 'lastObject');
 }
 
 export function computeComparisonForWidth(comparisons, width) {
@@ -9,22 +9,19 @@ export function computeComparisonForWidth(comparisons, width) {
 }
 
 export function computeComparisonsForBrowser(comparisons, browser) {
-  return comparisons.filterBy('browser.id', browser.get('id'));
+  return comparisons.filterBy('browser.id', get(browser, 'id'));
 }
 
 export function computeWidestComparisonWithDiff(comparisons) {
-  return comparisons
-    .sortBy('width')
-    .filterBy('isDifferent')
-    .get('lastObject');
+  return get(comparisons.sortBy('width').filterBy('isDifferent'), 'lastObject');
 }
 
 export function snapshotsWithDiffForBrowser(snapshots, browser) {
   return snapshots.filter(snapshot => {
-    const allComparisons = snapshot.get('comparisons');
+    const allComparisons = get(snapshot, 'comparisons');
     const comparisonsForBrowser = computeComparisonsForBrowser(allComparisons, browser);
     return comparisonsForBrowser.any(comparison => {
-      return comparison.get('isDifferent');
+      return get(comparison, 'isDifferent');
     });
   });
 }
@@ -42,7 +39,7 @@ export function countDiffsWithSnapshotsPerBrowser(snapshots, browsers) {
 
   browsers.forEach(browser => {
     const unreviewedSnapshotsWithDiffsInBrowser = snapshotsWithDiffForBrowser(snapshots, browser);
-    counts.set(browser.get('slug'), unreviewedSnapshotsWithDiffsInBrowser);
+    set(counts, get(browser, 'slug'), unreviewedSnapshotsWithDiffsInBrowser);
   });
   return counts;
 }

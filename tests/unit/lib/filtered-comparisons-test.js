@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import {describe, it} from 'mocha';
+import {get} from '@ember/object';
 import {
   computeWidestComparison,
   computeComparisonForWidth,
@@ -8,22 +9,21 @@ import {
   snapshotsWithDiffForBrowser,
   countDiffsWithSnapshotsPerBrowser,
 } from 'percy-web/lib/filtered-comparisons';
-import Object from '@ember/object';
 
 describe('filtered-comparisons', function() {
-  const chromeBrowser = Object.create({
+  const chromeBrowser = {
     slug: 'chrome',
     id: 'chrome-id',
-  });
-  const firefoxBrowser = Object.create({
+  };
+  const firefoxBrowser = {
     slug: 'firefox',
     id: 'firefox-id',
-  });
+  };
 
-  const narrowComparisonNoDiff = Object.create({width: 1, isDifferent: false});
-  const narrowComparisonWithDiff = Object.create({width: 1, isDifferent: true});
-  const wideComparisonNoDiff = Object.create({width: 1000, isDifferent: false});
-  const wideComparisonWithDiff = Object.create({width: 1000, isDifferent: true});
+  const narrowComparisonNoDiff = {width: 1, isDifferent: false};
+  const narrowComparisonWithDiff = {width: 1, isDifferent: true};
+  const wideComparisonNoDiff = {width: 1000, isDifferent: false};
+  const wideComparisonWithDiff = {width: 1000, isDifferent: true};
 
   describe('#computeWidestComparison', function() {
     it('returns widest comparison', function() {
@@ -49,8 +49,8 @@ describe('filtered-comparisons', function() {
 
   describe('#computeComparisonsForBrowser', function() {
     it('returns comparisons with maching browser', function() {
-      const chromeComparison = Object.create({browser: chromeBrowser});
-      const firefoxComparison = Object.create({browser: firefoxBrowser});
+      const chromeComparison = {browser: chromeBrowser};
+      const firefoxComparison = {browser: firefoxBrowser};
 
       expect(
         computeComparisonsForBrowser([firefoxComparison, chromeComparison], chromeBrowser),
@@ -84,18 +84,18 @@ describe('filtered-comparisons', function() {
 
   describe('#snapshotsWithDiffForBrowser', function() {
     it('returns snapshots which have comparisons with diffs for matching browser', function() {
-      const chromeComparisonWithDiff = Object.create({browser: chromeBrowser, isDifferent: true});
-      const firefoxComparisonWithDiff = Object.create({browser: firefoxBrowser, isDifferent: true});
-      const chromeComparisonNoDiff = Object.create({browser: chromeBrowser, isDifferent: false});
+      const chromeComparisonWithDiff = {browser: chromeBrowser, isDifferent: true};
+      const firefoxComparisonWithDiff = {browser: firefoxBrowser, isDifferent: true};
+      const chromeComparisonNoDiff = {browser: chromeBrowser, isDifferent: false};
 
-      const snapshotWithChrome = Object.create({comparisons: [chromeComparisonWithDiff]});
-      const snapshotWithFirefox = Object.create({comparisons: [firefoxComparisonWithDiff]});
-      const snapshotWithBothBrowsersAndDiffs = Object.create({
+      const snapshotWithChrome = {comparisons: [chromeComparisonWithDiff]};
+      const snapshotWithFirefox = {comparisons: [firefoxComparisonWithDiff]};
+      const snapshotWithBothBrowsersAndDiffs = {
         comparisons: [chromeComparisonWithDiff, firefoxComparisonWithDiff],
-      });
-      const snapshotWithBothBrowsersAndMixedDiffs = Object.create({
+      };
+      const snapshotWithBothBrowsersAndMixedDiffs = {
         comparisons: [chromeComparisonNoDiff, firefoxComparisonWithDiff],
-      });
+      };
 
       expect(
         snapshotsWithDiffForBrowser(
@@ -113,30 +113,33 @@ describe('filtered-comparisons', function() {
 
   describe('#countDiffsWithSnapshotPerBrowser', function() {
     it('creates correct data structure', function() {
-      const snapshotWithTwoChromeDiffs = Object.create({
+      const snapshotWithTwoChromeDiffs = {
         comparisons: [
-          Object.create({browser: chromeBrowser, isDifferent: true}),
-          Object.create({browser: chromeBrowser, isDifferent: true}),
-          Object.create({browser: firefoxBrowser, isDifferent: false}),
+          {browser: chromeBrowser, isDifferent: true},
+          {browser: chromeBrowser, isDifferent: true},
+          {browser: firefoxBrowser, isDifferent: false},
         ],
-      });
+      };
 
-      const mixedSnapshotWithFirefoxDiff = Object.create({
+      const mixedSnapshotWithFirefoxDiff = {
         comparisons: [
-          Object.create({browser: chromeBrowser, isDifferent: false}),
-          Object.create({browser: firefoxBrowser, isDifferent: true}),
+          {browser: chromeBrowser, isDifferent: false},
+          {browser: firefoxBrowser, isDifferent: true},
         ],
-      });
-      const snapshotWithFirefoxDiff = Object.create({
-        comparisons: [Object.create({browser: firefoxBrowser, isDifferent: true})],
-      });
+      };
+      const snapshotWithFirefoxDiff = {
+        comparisons: [{browser: firefoxBrowser, isDifferent: true}],
+      };
 
       const result = countDiffsWithSnapshotsPerBrowser(
         [snapshotWithTwoChromeDiffs, mixedSnapshotWithFirefoxDiff, snapshotWithFirefoxDiff],
         [chromeBrowser, firefoxBrowser],
       );
-      expect(result.get('firefox')).to.eql([mixedSnapshotWithFirefoxDiff, snapshotWithFirefoxDiff]);
-      expect(result.get('chrome')).to.eql([snapshotWithTwoChromeDiffs]);
+      expect(get(result, 'firefox')).to.eql([
+        mixedSnapshotWithFirefoxDiff,
+        snapshotWithFirefoxDiff,
+      ]);
+      expect(get(result, 'chrome')).to.eql([snapshotWithTwoChromeDiffs]);
     });
   });
 });
