@@ -8,8 +8,6 @@ import {
   computeWidestComparisonWithDiff,
 } from 'percy-web/lib/filtered-comparisons';
 
-// TODO: rename this to something other than browser-comparisons? To be more generic?
-// Filtered-comparisons?
 export default Mixin.create({
   // To use this mixin, your component must have these properties:
   // REQUIRED: activeBrowser
