@@ -61,7 +61,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
       this.analytics.track('Build Viewed', organization, eventProperties);
     },
 
-    openSnapshotFullModal(snapshotId, snapshotSelectedWidth) {
+    openSnapshotFullModal(snapshotId, snapshotSelectedWidth, activeBrowserSlug) {
       this.send('updateIsHidingBuildContainer', true);
       const build = this._getBuild();
 
@@ -79,7 +79,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
         snapshotId,
         snapshotSelectedWidth,
         {
-          queryParams: {mode: 'diff'},
+          queryParams: {mode: 'diff', activeBrowserSlug},
         },
       );
     },

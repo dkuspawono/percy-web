@@ -3,11 +3,23 @@ import {not, alias, or} from '@ember/object/computed';
 import {computed, observer} from '@ember/object';
 import Component from '@ember/component';
 import {next} from '@ember/runloop';
+import FilteredComparisonMixin from 'percy-web/mixins/filtered-comparisons';
 
-export default Component.extend({
-  snapshot: null,
-  activeSnapshotId: null,
+export default Component.extend(FilteredComparisonMixin, {
+  // required params
   allDiffsShown: null,
+  build: null,
+  // required for FilteredComparisonMixin
+  snapshot: null,
+  activeBrowser: null,
+
+  // required actions
+  showSnapshotFullModalTriggered: null,
+  createReview: null,
+  updateActiveSnapshotId: null,
+
+  // optional params
+  activeSnapshotId: null,
 
   classNames: ['SnapshotViewer mb-2'],
   classNameBindings: [
@@ -18,19 +30,9 @@ export default Component.extend({
   attributeBindings: ['data-test-snapshot-viewer'],
   'data-test-snapshot-viewer': true,
 
-  comparisons: alias('snapshot.comparisons'),
-
+  // required for FilteredComparisonMixin
   snapshotSelectedWidth: or('userSelectedWidth', 'defaultWidth'),
   userSelectedWidth: null,
-
-  defaultWidth: or('snapshot.maxComparisonWidthWithDiff', 'snapshot.maxComparisonWidth'),
-
-  selectedComparison: computed('snapshot.widestComparison', 'snapshotSelectedWidth', function() {
-    return (
-      this.get('snapshot').comparisonForWidth(this.get('snapshotSelectedWidth')) ||
-      this.get('snapshot.widestComparison')
-    );
-  }),
 
   isActiveSnapshot: computed('activeSnapshotId', 'snapshot.id', function() {
     return this.get('activeSnapshotId') === this.get('snapshot.id');

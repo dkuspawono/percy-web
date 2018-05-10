@@ -1,15 +1,19 @@
 import Component from '@ember/component';
 import {inject as service} from '@ember/service';
 import {computed} from '@ember/object';
-import {alias, equal, filterBy, not, or} from '@ember/object/computed';
+import {equal, not, or} from '@ember/object/computed';
 import utils from 'percy-web/lib/utils';
+import FilteredComparisonMixin from 'percy-web/mixins/filtered-comparisons';
 
-export default Component.extend({
+export default Component.extend(FilteredComparisonMixin, {
   // required params
-  snapshot: null,
   flashMessages: service(),
   selectedWidth: null,
   selectedComparison: null,
+  // required for FilteredComparisonMixin:
+  snapshot: null,
+  snapshotSelectedWidth: null,
+  activeBrowser: null,
 
   // optional params
   fullscreen: false,
@@ -27,12 +31,10 @@ export default Component.extend({
 
   isShowingFilteredComparisons: true,
   isNotShowingFilteredComparisons: not('isShowingFilteredComparisons'),
-  comparisons: alias('snapshot.comparisons'),
-  comparisonsWithDiffs: filterBy('snapshot.comparisons', 'isDifferent'),
   isShowingAllComparisons: or('noComparisonsHaveDiffs', 'isNotShowingFilteredComparisons'),
   noComparisonsHaveDiffs: equal('comparisonsWithDiffs.length', 0),
-  allComparisonsHaveDiffs: computed('comparisons.[]', 'comparisonsWithDiffs.[]', function() {
-    return this.get('comparisons.length') === this.get('comparisonsWithDiffs.length');
+  allComparisonsHaveDiffs: computed('browserComparisons.[]', 'comparisonsWithDiffs.[]', function() {
+    return this.get('browserComparisons.length') === this.get('comparisonsWithDiffs.length');
   }),
 
   actions: {

@@ -1,35 +1,28 @@
 import Mixin from '@ember/object/mixin';
-import {computed, get} from '@ember/object';
 import {alias, or, filterBy} from '@ember/object/computed';
 import {
   widestComparison,
   comparisonForWidth,
+  comparisonsForBrowser,
   widestComparisonWithDiff,
-} from 'percy-web/lib/computed/browser-comparisons';
+} from 'percy-web/lib/filtered-comparisons';
 
 // TODO: rename this to something other than browser-comparisons? To be more generic?
 // Filtered-comparisons?
 export default Mixin.create({
   // To use this mixin, your component must have these properties:
+  // REQUIRED: activeBrowser
   // REQUIRED: snapshot
   // REQUIRED: snapshotSelectedWidth
 
-  comparisons: alias('snapshot.comparisons'),
+  _comparisons: alias('snapshot.comparisons'),
 
-  comparisonForWidth: computed('comparisons', 'snapshotSelectedWidth', function() {
-    return comparisonForWidth(get(this, 'comparisons'), get(this, 'snapshotSelectedWidth'));
-  }),
+  browserComparisons: comparisonsForBrowser('_comparisons', 'activeBrowser'),
+  comparisonForWidth: comparisonForWidth('browserComparisons', 'snapshotSelectedWidth'),
+  widestComparisonForBrowser: widestComparison('browserComparisons'),
+  widestComparisonWithDiff: widestComparisonWithDiff('browserComparisons'),
 
-  widestComparison: computed('comparisons.@each.width', function() {
-    return widestComparison(get(this, 'comparisons'));
-  }),
-
-  widestComparisonWithDiff: computed('comparisons.@each.{width, isDifferent', function() {
-    return widestComparisonWithDiff(get(this, 'comparisons'));
-  }),
-
-  selectedComparison: or('comparisonForWidth', 'widestComparison'),
-
-  defaultWidth: or('widestComparisonWithDiff.width'),
-  comparisonsWithDiffs: filterBy('comparisons', 'isDifferent'),
+  selectedComparison: or('comparisonForWidth', 'widestComparisonForBrowser'),
+  defaultWidth: or('widestComparisonWithDiff.width', 'widestComparisonForBrowser.width'),
+  comparisonsWithDiffs: filterBy('browserComparisons', 'isDifferent'),
 });

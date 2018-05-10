@@ -1,18 +1,43 @@
+import {computed} from '@ember/object';
 import Object from '@ember/object';
 
-export function widestComparison(comparisons) {
+export function widestComparison(comparisonsKey) {
+  return computed(`${comparisonsKey}.@each.width`, function() {
+    return computeWidestComparison(this.get(comparisonsKey));
+  });
+}
+
+export function comparisonForWidth(comparisonsKey, widthKey) {
+  return computed(`${comparisonsKey}.@each.width`, widthKey, function() {
+    return computeComparisonForWidth(this.get(comparisonsKey), this.get(widthKey));
+  });
+}
+
+export function comparisonsForBrowser(comparisonsKey, activeBrowserKey) {
+  return computed(`${comparisonsKey}.@each.browser`, `${activeBrowserKey}.id`, function() {
+    return computeComparisonsForBrowser(this.get(comparisonsKey), this.get(activeBrowserKey));
+  });
+}
+
+export function widestComparisonWithDiff(comparisonsKey) {
+  return computed(`${comparisonsKey}.@each.width`, function() {
+    return computeWidestComparisonWithDiff(this.get(comparisonsKey));
+  });
+}
+
+export function computeWidestComparison(comparisons) {
   return comparisons.sortBy('width').get('lastObject');
 }
 
-export function comparisonForWidth(comparisons, width) {
+export function computeComparisonForWidth(comparisons, width) {
   return comparisons.findBy('width', parseInt(width, 10));
 }
 
-export function comparisonsForBrowser(comparisons, browser) {
+export function computeComparisonsForBrowser(comparisons, browser) {
   return comparisons.filterBy('browser.id', browser.get('id'));
 }
 
-export function widestComparisonWithDiff(comparisons) {
+export function computeWidestComparisonWithDiff(comparisons) {
   return comparisons
     .sortBy('width')
     .filterBy('isDifferent')
@@ -22,7 +47,7 @@ export function widestComparisonWithDiff(comparisons) {
 export function snapshotsWithDiffForBrowser(snapshots, browser) {
   return snapshots.filter(snapshot => {
     const allComparisons = snapshot.get('comparisons');
-    const comparisonsForBrowser = comparisonsForBrowser(allComparisons, browser);
+    const comparisonsForBrowser = computeComparisonsForBrowser(allComparisons, browser);
     return comparisonsForBrowser.any(comparison => {
       return comparison.get('isDifferent');
     });

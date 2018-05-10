@@ -37,6 +37,7 @@ describe('Integration: SnapshotList', function() {
   it('gets snapshots with no diffs after expanding no diffs section', function() {
     const stub = sinon.stub();
     const build = make('build', 'finished');
+    const browser = make('browser');
 
     const numSnapshotsUnchanged = 3;
     const snapshotsUnchanged = makeList('snapshot', numSnapshotsUnchanged, 'withNoDiffs');
@@ -48,6 +49,7 @@ describe('Integration: SnapshotList', function() {
       numSnapshotsUnchanged,
       build,
       stub,
+      browser,
     });
 
     this.render(hbs`{{snapshot-list
@@ -56,6 +58,7 @@ describe('Integration: SnapshotList', function() {
       numSnapshotsUnchanged=numSnapshotsUnchanged
       createReview=stub
       showSnapshotFullModalTriggered=stub
+      activeBrowser=browser
     }}`);
 
     expect(SnapshotList.isNoDiffsBatchVisible).to.equal(true);
@@ -90,7 +93,6 @@ describe('Integration: SnapshotList', function() {
     }}`);
 
     SnapshotList.clickToggleNoDiffsSection();
-
     percySnapshot(this.test);
   });
 
@@ -98,8 +100,10 @@ describe('Integration: SnapshotList', function() {
     const numSnapshots = 151;
 
     beforeEach(function() {
+      this.timeout(6000);
       const stub = sinon.stub();
       const build = make('build', 'finished');
+      const browser = make('browser');
 
       const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build});
       this.set('snapshotsChanged', snapshotsChanged);
@@ -108,6 +112,7 @@ describe('Integration: SnapshotList', function() {
         snapshotsChanged,
         build,
         stub,
+        browser,
         isKeyboardNavEnabled: true,
       });
 
@@ -117,6 +122,7 @@ describe('Integration: SnapshotList', function() {
         createReview=stub
         showSnapshotFullModalTriggered=stub
         isKeyboardNavEnabled=isKeyboardNavEnabled
+        activeBrowser=browser
       }}`);
     });
 
@@ -158,6 +164,7 @@ describe('Integration: SnapshotList', function() {
     beforeEach(function() {
       const stub = sinon.stub();
       const build = make('build', 'finished');
+      const browser = make('browser');
 
       const numSnapshotsUnchanged = 3;
       const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build});
@@ -172,6 +179,7 @@ describe('Integration: SnapshotList', function() {
         snapshotsUnchanged,
         numSnapshotsUnchanged,
         stub,
+        browser,
         isKeyboardNavEnabled: true,
       });
 
@@ -182,6 +190,7 @@ describe('Integration: SnapshotList', function() {
         createReview=stub
         showSnapshotFullModalTriggered=stub
         isKeyboardNavEnabled=isKeyboardNavEnabled
+        activeBrowser=browser
       }}`);
     });
 
