@@ -54,6 +54,7 @@ FactoryGuy.define('comparison', {
         // TODO: make the screenshot and image a real FactoryGuy model instead of POJO
         return {id: f.id, image: {id: f.id, url: '/images/test/diff.png', width: 375, height: 500}};
       },
+    },
     short: {
       baseScreenshot: () => make('screenshot', 'baseShort'),
       headScreenshot: () => make('screenshot', 'headShort'),

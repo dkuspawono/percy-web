@@ -32,7 +32,7 @@ export default Component.extend({
   // Set internally by actions
   activeSnapshotId: null,
 
-  shouldDeferImageLoading: gt('snapshotsChanged.length', 150),
+  shouldDeferImageLoading: gt('snapshotsChanged.length', 75),
 
   numSnapshotsUnchanged: computed('build.totalSnapshots', 'snapshotsChanged.length', function() {
     return this.get('build.totalSnapshots') - this.get('snapshotsChanged.length');
