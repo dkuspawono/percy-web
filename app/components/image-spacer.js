@@ -16,6 +16,8 @@ export default Component.extend(InViewportMixin, {
   deferredImageLoading: false,
   immediateImageLoading: not('deferredImageLoading'),
 
+  isHidingSpinner: false,
+
   // Whether or not the curent image is in the viewport.
   inViewport: alias('viewportEntered'),
 
