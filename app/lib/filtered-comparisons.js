@@ -1,30 +1,5 @@
-import {computed} from '@ember/object';
 import Object from '@ember/object';
-
-export function widestComparison(comparisonsKey) {
-  return computed(`${comparisonsKey}.@each.width`, function() {
-    return computeWidestComparison(this.get(comparisonsKey));
-  });
-}
-
-export function comparisonForWidth(comparisonsKey, widthKey) {
-  return computed(`${comparisonsKey}.@each.width`, widthKey, function() {
-    return computeComparisonForWidth(this.get(comparisonsKey), this.get(widthKey));
-  });
-}
-
-export function comparisonsForBrowser(comparisonsKey, activeBrowserKey) {
-  return computed(`${comparisonsKey}.@each.browser`, `${activeBrowserKey}.id`, function() {
-    return computeComparisonsForBrowser(this.get(comparisonsKey), this.get(activeBrowserKey));
-  });
-}
-
-export function widestComparisonWithDiff(comparisonsKey) {
-  return computed(`${comparisonsKey}.@each.width`, function() {
-    return computeWidestComparisonWithDiff(this.get(comparisonsKey));
-  });
-}
-
+//TODO convert this file to use get(this,whatever) syntax
 export function computeWidestComparison(comparisons) {
   return comparisons.sortBy('width').get('lastObject');
 }
