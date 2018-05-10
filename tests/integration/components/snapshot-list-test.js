@@ -98,10 +98,15 @@ describe('Integration: SnapshotList', function() {
     const numSnapshots = 151;
 
     beforeEach(function() {
+      this.timeout(6000);
       const stub = sinon.stub();
       const build = make('build', 'finished');
 
-      const snapshotsChanged = makeList('snapshot', numSnapshots, 'withComparisons', {build});
+      const snapshotsChanged = makeList('snapshot', numSnapshots, {build});
+      snapshotsChanged.forEach(snapshot => {
+        snapshot.set('comparisons', [make('comparison', 'short')]);
+      });
+
       this.set('snapshotsChanged', snapshotsChanged);
 
       this.setProperties({
