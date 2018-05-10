@@ -94,11 +94,10 @@ describe('Integration: SnapshotList', function() {
     percySnapshot(this.test);
   });
 
-  describe('when there are more than 150 snapshots with diffs', function() {
-    const numSnapshots = 151;
+  describe('when there are more than 75 snapshots with diffs', function() {
+    const numSnapshots = 76;
 
     beforeEach(function() {
-      this.timeout(6000);
       const stub = sinon.stub();
       const build = make('build', 'finished');
 

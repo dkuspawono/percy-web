@@ -33,7 +33,7 @@ export default Component.extend({
   snapshotsUnchanged: null,
   activeSnapshotId: null,
 
-  shouldDeferImageLoading: gt('snapshotsChanged.length', 150),
+  shouldDeferImageLoading: gt('snapshotsChanged.length', 75),
 
   actions: {
     updateActiveSnapshotId(newSnapshotId) {
