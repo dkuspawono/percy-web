@@ -1,5 +1,6 @@
 import FactoryGuy from 'ember-data-factory-guy';
 import moment from 'moment';
+import {make} from 'ember-data-factory-guy';
 
 export const TEST_COMPARISON_WIDTHS = [375, 550, 1024];
 
@@ -8,29 +9,19 @@ FactoryGuy.define('comparison', {
     startedProcessingAt: () => moment().subtract(65, 'seconds'),
     finishedProcessingAt: () => moment().subtract(23, 'seconds'),
     diffRatio: 0.23,
+    width: 1024,
     browser: () => {
       return FactoryGuy.make('browser');
     },
 
-    headScreenshot: f => {
-      // TODO: make the screenshot and image a real FactoryGuy model instead of POJO
-      return {
-        id: f.id,
-        image: {id: f.id, url: '/images/test/v2.png', width: 375, height: 500},
-        lossyImage: {id: f.id, url: '/images/test/v2-lossy.png', width: 375, height: 500},
-      };
+    baseScreenshot: () => {
+      return FactoryGuy.make('screenshot', 'base');
     },
-    baseScreenshot: f => {
-      // TODO: make the screenshot and image a real FactoryGuy model instead of POJO
-      return {
-        id: f.id,
-        image: {id: f.id, url: '/images/test/v1.png', width: 375, height: 500},
-        lossyImage: {id: f.id, url: '/images/test/v1-lossy.png', width: 375, height: 500},
-      };
+    headScreenshot: () => {
+      return FactoryGuy.make('screenshot', 'head');
     },
-    diffImage: f => {
-      // TODO: make the screenshot and image a real FactoryGuy model instead of POJO
-      return {id: f.id, image: {id: f.id, url: '/images/test/diff.png', width: 375, height: 500}};
+    diffImage: () => {
+      return FactoryGuy.make('image', 'diffImage');
     },
   },
 
@@ -38,7 +29,7 @@ FactoryGuy.define('comparison', {
     new: {
       baseScreenshot: null,
     },
-
+    // TODO: convert this to use the real factories
     forChrome: {
       browser: () => {
         return FactoryGuy.make('browser', 'chrome');
@@ -63,6 +54,10 @@ FactoryGuy.define('comparison', {
         // TODO: make the screenshot and image a real FactoryGuy model instead of POJO
         return {id: f.id, image: {id: f.id, url: '/images/test/diff.png', width: 375, height: 500}};
       },
+    short: {
+      baseScreenshot: () => make('screenshot', 'baseShort'),
+      headScreenshot: () => make('screenshot', 'headShort'),
+      diffImage: () => make('image', 'diffImage', 'short'),
     },
   },
 });
