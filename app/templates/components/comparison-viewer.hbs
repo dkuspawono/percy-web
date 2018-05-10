@@ -8,6 +8,7 @@
               image=image
               imageClass="ComparisonViewer-pdiffImage"
               deferredImageLoading=shouldDeferImageLoading
+              dataTestId="comparison-viewer-base-image-loading"
             }}
           </div>
         {{/with}}
@@ -20,6 +21,7 @@
               image=lossyImage
               imageClass="ComparisonViewer-pdiffImage ComparisonViewer-pdiffImage--actionable"
               deferredImageLoading=shouldDeferImageLoading
+              dataTestId="comparison-viewer-head-image-loading"
               }}
             {{#if showDiffOverlay}}
               {{#with comparison.diffImage as |diffImage|}}
