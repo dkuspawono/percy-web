@@ -1,6 +1,13 @@
-import {create, isVisible, clickable, hasClass, notHasClass} from 'ember-cli-page-object';
 import {SnapshotViewerHeader} from 'percy-web/tests/pages/components/snapshot-viewer-header';
 import {alias} from 'ember-cli-page-object/macros';
+import {
+  create,
+  isVisible,
+  isPresent,
+  clickable,
+  hasClass,
+  notHasClass,
+} from 'ember-cli-page-object';
 
 const SELECTORS = {
   SNAPSHOT_VIEWER: '[data-test-snapshot-viewer]',
@@ -8,6 +15,8 @@ const SELECTORS = {
   DIFF_IMAGE_BOX: '[data-test-comparison-viewer-diff-image-container] img',
   NO_DIFF_BOX: '[data-test-comparison-viewer-unchanged]',
   SHOW_UNCHANGED_COMPARISONS: '[data-test-comaprison-viewer-show-unchanged-comparisons]',
+  BASE_SNAPSHOT_LOADING_SPINNER: '[data-test-id=comparison-viewer-base-image-loading]',
+  HEAD_SNAPSHOT_LOADING_SPINNER: '[data-test-id=comparison-viewer-head-image-loading]',
 };
 
 export const SnapshotViewer = {
@@ -30,6 +39,9 @@ export const SnapshotViewer = {
 
   isDiffImageBoxVisible: isVisible(SELECTORS.DIFF_IMAGE_BOX),
   clickDiffImageBox: clickable(SELECTORS.DIFF_IMAGE_BOX),
+
+  isBaseLoadingSpinnerPresent: isPresent(SELECTORS.BASE_SNAPSHOT_LOADING_SPINNER),
+  isHeadLoadingSpinnerPresent: isPresent(SELECTORS.HEAD_SNAPSHOT_LOADING_SPINNER),
 
   isNoDiffBoxVisible: isVisible(SELECTORS.NO_DIFF_BOX),
 
