@@ -1,5 +1,6 @@
 {{#if shouldLoadImage}}
   {{simple-image image=image classes=imageClass}}
-{{else if (not deferredImageLoading)}}
+{{else if isHidingSpinner}}
+{{else}}
   {{loading-page dataTestId=dataTestId}}
 {{/if}}
