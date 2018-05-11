@@ -39,10 +39,11 @@ export default Component.extend(InViewportMixin, {
       // Since adding listeners is memory intensive and can cause jank, disable viewport handling
       // entirely if we are not doing deferred image loading.
       viewportEnabled: this.get('deferredImageLoading'),
+      viewportSpy: true,
       viewportTolerance: {
         top: 0,
         // Pre-emptively load 1000px worth of images below the viewport.
-        bottom: 1000,
+        bottom: 50,
         left: 0,
         right: 0,
       },
