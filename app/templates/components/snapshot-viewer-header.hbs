@@ -88,7 +88,7 @@
 
       <div class="btn-group btn-group-alt">
         {{comparison-switcher
-          comparisons=(if isShowingAllComparisons browserComparisons comparisonsWithDiffs)
+          comparisons=(if isShowingAllComparisons filteredComparisons.comparisons filteredComparisons.comparisonsWithDiffs)
           selectedWidth=snapshotSelectedWidth
           updateSelectedWidth=updateSelectedWidth
           data-test-SnapshotViewer-widthSwitcher=true

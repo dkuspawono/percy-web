@@ -3,13 +3,12 @@ import {not, alias, or} from '@ember/object/computed';
 import {computed, observer} from '@ember/object';
 import Component from '@ember/component';
 import {next} from '@ember/runloop';
-import FilteredComparisonMixin from 'percy-web/mixins/filtered-comparisons';
+import filteredComparisons from 'percy-web/mixins/filtered-comparisons';
 
-export default Component.extend(FilteredComparisonMixin, {
+export default Component.extend({
   // required params
   allDiffsShown: null,
   build: null,
-  // required for FilteredComparisonMixin
   snapshot: null,
   activeBrowser: null,
 
@@ -30,9 +29,18 @@ export default Component.extend(FilteredComparisonMixin, {
   attributeBindings: ['data-test-snapshot-viewer'],
   'data-test-snapshot-viewer': true,
 
-  // required for FilteredComparisonMixin
-  snapshotSelectedWidth: or('userSelectedWidth', 'defaultWidth'),
+  snapshotSelectedWidth: or('userSelectedWidth', 'filteredComparisons.defaultWidth'),
   userSelectedWidth: null,
+
+  filteredComparisons: computed('snapshot', 'activeBrowser', 'snapshotSelectedWidth', function() {
+    return filteredComparisons.create({
+      snapshot: this.get('snapshot'),
+      activeBrowser: this.get('activeBrowser'),
+      snapshotSelectedWidth: this.get('userSelectedWidth'),
+    });
+  }),
+
+  selectedComparison: alias('filteredComparisons.selectedComparison'),
 
   isActiveSnapshot: computed('activeSnapshotId', 'snapshot.id', function() {
     return this.get('activeSnapshotId') === this.get('snapshot.id');

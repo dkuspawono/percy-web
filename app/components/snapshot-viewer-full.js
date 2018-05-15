@@ -1,8 +1,9 @@
 import {computed} from '@ember/object';
+import {alias} from '@ember/object/computed';
 import Component from '@ember/component';
-import FilteredComparisonMixin from 'percy-web/mixins/filtered-comparisons';
+import filteredComparisons from 'percy-web/mixins/filtered-comparisons';
 
-export default Component.extend(FilteredComparisonMixin, {
+export default Component.extend({
   classNames: ['SnapshotViewerFull'],
   attributeBindings: ['data-test-snapshot-viewer-full'],
   'data-test-snapshot-viewer-full': true,
@@ -13,11 +14,18 @@ export default Component.extend(FilteredComparisonMixin, {
   transitionRouteToWidth: null,
   closeSnapshotFullModal: null,
   createReview: null,
-
-  // Required for FilteredComparisonMixin
   snapshot: null,
   snapshotSelectedWidth: null,
   activeBrowser: null,
+
+  filteredComparisons: computed('snapshot', 'activeBrowser', 'snapshotSelectedWidth', function() {
+    return filteredComparisons.create({
+      snapshot: this.get('snapshot'),
+      activeBrowser: this.get('activeBrowser'),
+      snapshotSelectedWidth: this.get('snapshotSelectedWidth'),
+    });
+  }),
+  selectedComparison: alias('filteredComparisons.selectedComparison'),
 
   galleryMap: ['base', 'diff', 'head'],
 

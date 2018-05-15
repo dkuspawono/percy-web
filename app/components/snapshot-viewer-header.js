@@ -3,14 +3,13 @@ import {inject as service} from '@ember/service';
 import {computed} from '@ember/object';
 import {equal, not, or} from '@ember/object/computed';
 import utils from 'percy-web/lib/utils';
-import FilteredComparisonMixin from 'percy-web/mixins/filtered-comparisons';
+import filteredComparisons from 'percy-web/mixins/filtered-comparisons';
 
-export default Component.extend(FilteredComparisonMixin, {
+export default Component.extend({
   // required params
   flashMessages: service(),
   selectedWidth: null,
   selectedComparison: null,
-  // required for FilteredComparisonMixin:
   snapshot: null,
   snapshotSelectedWidth: null,
   activeBrowser: null,
@@ -29,13 +28,28 @@ export default Component.extend(FilteredComparisonMixin, {
   registerChild() {},
   updateComparisonMode() {},
 
+  filteredComparisons: computed('snapshot', 'activeBrowser', 'snapshotSelectedWidth', function() {
+    return filteredComparisons.create({
+      snapshot: this.get('snapshot'),
+      activeBrowser: this.get('activeBrowser'),
+      snapshotSelectedWidth: this.get('snapshotSelectedWidth'),
+    });
+  }),
+
   isShowingFilteredComparisons: true,
   isNotShowingFilteredComparisons: not('isShowingFilteredComparisons'),
   isShowingAllComparisons: or('noComparisonsHaveDiffs', 'isNotShowingFilteredComparisons'),
-  noComparisonsHaveDiffs: equal('comparisonsWithDiffs.length', 0),
-  allComparisonsHaveDiffs: computed('browserComparisons.[]', 'comparisonsWithDiffs.[]', function() {
-    return this.get('browserComparisons.length') === this.get('comparisonsWithDiffs.length');
-  }),
+  noComparisonsHaveDiffs: equal('filteredComparisons.comparisonsWithDiffs.length', 0),
+  allComparisonsHaveDiffs: computed(
+    'filteredComparisons.comparisons.[]',
+    'filteredComparisons.comparisonsWithDiffs.[]',
+    function() {
+      return (
+        this.get('filteredComparisons.comparisons.length') ===
+        this.get('filteredComparisons.comparisonsWithDiffs.length')
+      );
+    },
+  ),
 
   actions: {
     onCopySnapshotUrlToClipboard() {
