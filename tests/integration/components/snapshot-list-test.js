@@ -96,11 +96,10 @@ describe('Integration: SnapshotList', function() {
     percySnapshot(this.test);
   });
 
-  describe('when there are more than 150 snapshots with diffs', function() {
-    const numSnapshots = 151;
+  describe('when there are too many snapshots with diffs', function() {
+    const numSnapshots = 10;
 
     beforeEach(function() {
-      this.timeout(6000);
       const stub = sinon.stub();
       const build = make('build', 'finished');
       const browser = make('browser');
@@ -116,6 +115,7 @@ describe('Integration: SnapshotList', function() {
         isKeyboardNavEnabled: true,
       });
 
+      // Override `isDefaultExpanded` so we don't have to render 150 snapshots at once
       this.render(hbs`{{snapshot-list
         snapshotsChanged=snapshotsChanged
         build=build
@@ -123,6 +123,7 @@ describe('Integration: SnapshotList', function() {
         showSnapshotFullModalTriggered=stub
         isKeyboardNavEnabled=isKeyboardNavEnabled
         activeBrowser=browser
+        isDefaultExpanded=false
       }}`);
     });
 
