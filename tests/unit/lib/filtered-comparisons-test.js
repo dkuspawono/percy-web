@@ -95,17 +95,14 @@ describe('filtered-comparisons', function() {
         comparisons: [chromeComparisonNoDiff, firefoxComparisonWithDiff],
       };
 
-      expect(
-        snapshotsWithDiffForBrowser(
-          [
-            snapshotWithChrome,
-            snapshotWithFirefox,
-            snapshotWithBothBrowsersAndDiffs,
-            snapshotWithBothBrowsersAndMixedDiffs,
-          ],
-          chromeBrowser,
-        ),
-      ).to.eql([snapshotWithChrome, snapshotWithBothBrowsersAndDiffs]);
+      const allSnapshots = [
+        snapshotWithChrome,
+        snapshotWithFirefox,
+        snapshotWithBothBrowsersAndDiffs,
+        snapshotWithBothBrowsersAndMixedDiffs,
+      ];
+      let snapshots = snapshotsWithDiffForBrowser(allSnapshots, chromeBrowser);
+      expect(snapshots).to.eql([snapshotWithChrome, snapshotWithBothBrowsersAndDiffs]);
     });
   });
 
