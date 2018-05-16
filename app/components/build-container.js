@@ -32,13 +32,8 @@ export default Component.extend(PollingMixin, {
   },
 
   actions: {
-    showSnapshotFullModalTriggered(snapshotId, snapshotSelectedWidth, activeBrowserFamilySlug) {
-      this.sendAction(
-        'openSnapshotFullModal',
-        snapshotId,
-        snapshotSelectedWidth,
-        activeBrowserFamilySlug,
-      );
+    showSnapshotFullModalTriggered(snapshotId, snapshotSelectedWidth, activeBrowser) {
+      this.sendAction('openSnapshotFullModal', snapshotId, snapshotSelectedWidth, activeBrowser);
     },
 
     showSupport() {
