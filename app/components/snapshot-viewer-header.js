@@ -3,7 +3,7 @@ import {inject as service} from '@ember/service';
 import {computed} from '@ember/object';
 import {equal, not, or} from '@ember/object/computed';
 import utils from 'percy-web/lib/utils';
-import filteredComparisons from 'percy-web/mixins/filtered-comparisons';
+import filteredComparisons from 'percy-web/lib/filtered-comparisons';
 
 export default Component.extend({
   // required params

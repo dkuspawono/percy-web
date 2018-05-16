@@ -3,7 +3,7 @@ import {not, alias, or} from '@ember/object/computed';
 import {computed, observer} from '@ember/object';
 import Component from '@ember/component';
 import {next} from '@ember/runloop';
-import filteredComparisons from 'percy-web/mixins/filtered-comparisons';
+import filteredComparisons from 'percy-web/lib/filtered-comparisons';
 
 export default Component.extend({
   // required params

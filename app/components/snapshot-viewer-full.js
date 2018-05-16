@@ -1,7 +1,7 @@
 import {computed} from '@ember/object';
 import {alias} from '@ember/object/computed';
 import Component from '@ember/component';
-import filteredComparisons from 'percy-web/mixins/filtered-comparisons';
+import filteredComparisons from 'percy-web/lib/filtered-comparisons';
 
 export default Component.extend({
   classNames: ['SnapshotViewerFull'],
