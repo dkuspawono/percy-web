@@ -9,7 +9,7 @@ export default Factory.extend({
   browserFamily: association(),
 
   chrome: trait({
-    slug: 'chrome',
-    name: 'Chrome',
+    familySlug: 'chrome',
+    familyName: 'Chrome',
   }),
 });

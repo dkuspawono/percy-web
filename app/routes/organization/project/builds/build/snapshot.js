@@ -8,7 +8,7 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
   params: {},
   queryParams: {
     comparisonMode: {as: 'mode'},
-    activeBrowserSlug: {as: 'browser'},
+    activeBrowserFamilySlug: {as: 'browser'},
   },
   model(params /*transition*/) {
     this.set('params', params);
@@ -22,7 +22,7 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
     let build = this.modelFor('organization.project.builds.build');
     let activeBrowser = this.get('store')
       .peekAll('browser')
-      .findBy('slug', params.activeBrowserSlug);
+      .findBy('familySlug', params.activeBrowserFamilySlug);
     controller.setProperties({
       build,
       activeBrowser,
@@ -60,7 +60,7 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
         {
           queryParams: {
             mode: this.get('params.comparisonMode'),
-            activeBrowserSlug: this.get('params.activeBrowserSlug'),
+            activeBrowserFamilySlug: this.get('params.activeBrowserFamilySlug'),
           },
         },
       );
