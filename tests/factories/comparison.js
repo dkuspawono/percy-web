@@ -9,9 +9,7 @@ FactoryGuy.define('comparison', {
     finishedProcessingAt: () => moment().subtract(23, 'seconds'),
     diffRatio: 0.23,
     browser: () => {
-      // Make this always the same number by default so all the default models can pretend
-      // they have the same browser
-      return FactoryGuy.make('browser', {id: 1});
+      return FactoryGuy.make('browser');
     },
 
     headScreenshot: f => {
