@@ -48,7 +48,19 @@ export default Route.extend(AuthenticatedRouteMixin, ResetScrollMixin, {
       this.analytics.track('Snapshot Fullscreen Viewed', organization, eventProperties);
     },
     updateComparisonMode(value) {
-      this.controllerFor(this.routeName).set('comparisonMode', value.toString());
+      const snapshot = this.modelFor(this.routeName);
+      this.transitionTo(
+        'organization.project.builds.build.snapshot',
+        snapshot.get('build.id'),
+        snapshot.get('id'),
+        this.get('params.width'),
+        {
+          queryParams: {
+            mode: value,
+            activeBrowserFamilySlug: this.get('params.activeBrowserFamilySlug'),
+          },
+        },
+      );
     },
     transitionRouteToWidth(width) {
       const snapshot = this.modelFor(this.routeName);
