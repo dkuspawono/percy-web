@@ -1,5 +1,19 @@
 /* stylelint-disable selector-max-specificity */
 
+@-moz-document url-prefix(){
+    body {
+        background-color: #BF3D6A;
+    }
+    .wrapper {
+      background-color: #0569A6;
+    }
+
+    .firefox-only {
+      display: inline;
+      visibility: visible;
+    }
+}
+
 .primary-hero {
   @media screen and (max-width: 767px /* var(--width-md) */) {
     .w-50 {
