@@ -2,6 +2,7 @@ import {or} from '@ember/object/computed';
 import Component from '@ember/component';
 import {computed, get} from '@ember/object';
 import {alias} from '@ember/object/computed';
+import {htmlSafe} from '@ember/string';
 
 export default Component.extend({
   build: null,
@@ -14,7 +15,7 @@ export default Component.extend({
   }),
 
   progressBarWidthStyle: computed('progressBarWidth', function() {
-    return `--progress-bar-width: ${get(this, 'progressBarWidth')}`.htmlSafe();
+    return htmlSafe(`--progress-bar-width: ${get(this, 'progressBarWidth')}`);
   }),
 
   showActions: or('build.isPending', 'build.isProcessing', 'build.isFinished'),
