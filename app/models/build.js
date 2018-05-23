@@ -1,5 +1,5 @@
 import {computed} from '@ember/object';
-import {bool, and, equal, not, or, filterBy, gt} from '@ember/object/computed';
+import {bool, and, equal, not, or, gt} from '@ember/object/computed';
 import DS from 'ember-data';
 import moment from 'moment';
 import {countDiffsWithSnapshotsPerBrowser} from 'percy-web/lib/filtered-comparisons';
@@ -140,9 +140,6 @@ export default DS.Model.extend({
   baseBuild: DS.belongsTo('build', {async: false, inverse: null}),
   snapshots: DS.hasMany('snapshot', {async: true}),
 
-  unreviewedSnapshots: filterBy('snapshots', 'isUnreviewed'),
-  unreviewedSnapshotsWithDiffs: filterBy('unreviewedSnapshots', 'isUnchanged', false),
-
   comparisons: computed('snapshots', function() {
     return this.get('snapshots').reduce((acc, snapshot) => {
       return acc.concat(snapshot.get('comparisons').toArray());
@@ -194,7 +191,17 @@ export default DS.Model.extend({
     'unreviewedSnapshotsWithDiffs.[]',
     'browsers.[]',
     function() {
-      const unreviewedSnapshotsWithDiffs = this.get('unreviewedSnapshotsWithDiffs');
+      const loadedSnapshotsForBuild = this.get('store')
+        .peekAll('snapshot')
+        .filterBy('build.id', this.get('id'));
+
+      const unreviewedSnapshotsWithDiffs = loadedSnapshotsForBuild.reduce((acc, snapshot) => {
+        if (snapshot.get('isUnreviewed') && !snapshot.get('isUnchanged')) {
+          acc.push(snapshot);
+        }
+        return acc;
+      }, []);
+
       return countDiffsWithSnapshotsPerBrowser(unreviewedSnapshotsWithDiffs, this.get('browsers'));
     },
   ),
