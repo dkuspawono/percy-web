@@ -183,18 +183,19 @@ export default DS.Model.extend({
     return this.store.findRecord('build', this.get('id'), {reload: true});
   },
 
+  loadedSnapshots: computed(function() {
+    return this.store.peekAll('snapshot').filterBy('build.id', this.get('id'));
+  }),
+
   // Returns Ember Object with a property for each browser for the build,
   // where the value is an array of snapshots that have diffs for that browser.
   // It is an ember object rather than a POJO so computed properties can observe it, and for ease
   // of use in templates.
   unapprovedSnapshotsWithDiffForBrowsers: computed(
-    'unreviewedSnapshotsWithDiffs.[]',
+    'loadedSnapshots.@each.{isUnreviewed,isUnchanged}',
     'browsers.[]',
     function() {
-      const loadedSnapshotsForBuild = this.store
-        .peekAll('snapshot')
-        .filterBy('build.id', this.get('id'));
-
+      const loadedSnapshotsForBuild = this.get('loadedSnapshots');
       const unreviewedSnapshotsWithDiffs = loadedSnapshotsForBuild.reduce((acc, snapshot) => {
         if (snapshot.get('isUnreviewed') && !snapshot.get('isUnchanged')) {
           acc.push(snapshot);
