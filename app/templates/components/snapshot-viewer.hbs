@@ -10,21 +10,24 @@
   activeBrowser=activeBrowser
   updateActiveBrowser=updateActiveBrowser
 }}
-
-{{#if isExpanded}}
-  {{#if selectedComparison}}
-    {{comparison-viewer
-      comparison=selectedComparison
-      allDiffsShown=allDiffsShown
-      snapshotSelectedWidth=snapshotSelectedWidth
-      shouldDeferImageLoading=shouldDeferImageLoading
-      isUnchangedSnapshotExpanded=isUnchangedSnapshotExpanded
-      data-test-SnapshotViewer-comparison=true
-      activeBrowser=activeBrowser
-    }}
-  {{else}}
-    <div class="p-2 text-center bg-gray-000 border-bottom border-gray-100" data-test-SnapshotViewer-noComparison>
-      No snapshot taken at {{snapshotSelectedWidth}}px.
-    </div>
+{{#if inViewport}}
+  {{#if isExpanded}}
+    {{#if selectedComparison}}
+      {{comparison-viewer
+        comparison=selectedComparison
+        allDiffsShown=allDiffsShown
+        snapshotSelectedWidth=snapshotSelectedWidth
+        shouldDeferImageLoading=shouldDeferImageLoading
+        isUnchangedSnapshotExpanded=isUnchangedSnapshotExpanded
+        data-test-SnapshotViewer-comparison=true
+        activeBrowser=activeBrowser
+      }}
+    {{else}}
+      <div class="p-2 text-center bg-gray-000 border-bottom border-gray-100" data-test-SnapshotViewer-noComparison>
+        No snapshot taken at {{snapshotSelectedWidth}}px.
+      </div>
+    {{/if}}
   {{/if}}
+{{else}}
+  Not in viewport
 {{/if}}

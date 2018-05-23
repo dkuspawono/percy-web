@@ -1,11 +1,12 @@
 import Ember from 'ember';
 import {not, alias, or} from '@ember/object/computed';
-import {computed, observer} from '@ember/object';
+import {computed, observer, setProperties} from '@ember/object';
 import Component from '@ember/component';
 import {next} from '@ember/runloop';
 import filteredComparisons, {hasDiffForBrowser} from 'percy-web/lib/filtered-comparisons';
+import InViewportMixin from 'ember-in-viewport';
 
-export default Component.extend({
+export default Component.extend(InViewportMixin, {
   // required params
   allDiffsShown: null,
   build: null,
@@ -104,5 +105,23 @@ export default Component.extend({
         this.set('isUserExpanded', true);
       }
     },
+  },
+
+  inViewport: alias('viewportEntered'),
+  init() {
+    this._super(...arguments);
+
+    setProperties(this, {
+      // Since adding listeners is memory intensive and can cause jank, disable viewport handling
+      // entirely if we are not doing deferred image loading.
+      // viewportEnabled: true,
+      // viewportTolerance: {
+      //   top: 0,
+      //   // Pre-emptively load 1000px worth of images below the viewport.
+      //   bottom: 1000,
+      //   left: 0,
+      //   right: 0,
+      // },
+    });
   },
 });
