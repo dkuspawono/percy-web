@@ -21,7 +21,9 @@ export default Controller.extend({
   initializeSnapshotOrdering() {
     const orderedBrowserSnapshots = {};
     const browsers = this.get('build.browsers');
-    const buildSnapshots = this.get('build.snapshots');
+    const buildSnapshots = this.get('store')
+      .peekAll('snapshot')
+      .filterBy('build.id', this.get('build.id'));
 
     browsers.forEach(browser => {
       const snapshotsWithDiffs = snapshotsWithDiffForBrowser(buildSnapshots, browser);

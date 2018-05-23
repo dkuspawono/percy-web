@@ -191,7 +191,7 @@ export default DS.Model.extend({
     'unreviewedSnapshotsWithDiffs.[]',
     'browsers.[]',
     function() {
-      const loadedSnapshotsForBuild = this.get('store')
+      const loadedSnapshotsForBuild = this.store
         .peekAll('snapshot')
         .filterBy('build.id', this.get('id'));
 

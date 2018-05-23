@@ -1,14 +1,16 @@
-import {or, alias} from '@ember/object/computed';
+import {or, alias, readOnly} from '@ember/object/computed';
 import {assert} from '@ember/debug';
 import Component from '@ember/component';
 import PollingMixin from 'percy-web/mixins/polling';
 import {inject as service} from '@ember/service';
 import {computed} from '@ember/object';
 import {snapshotsWithNoDiffForBrowser} from 'percy-web/lib/filtered-comparisons';
+import {task} from 'ember-concurrency';
 
 export default Component.extend(PollingMixin, {
   classNames: ['BuildContainer'],
   classNameBindings: ['isHidingBuildContainer:BuildContainer--snapshotModalOpen'],
+  store: service(),
 
   build: null,
   isHidingBuildContainer: false,
@@ -51,6 +53,37 @@ export default Component.extend(PollingMixin, {
       });
   },
 
+  _getLoadedSnapshots() {
+    return this.get('store')
+      .peekAll('snapshot')
+      .filterBy('build.id', this.get('build.id'));
+  },
+
+  isUnchangedSnapshotsLoading: readOnly('_toggleUnchangedSnapshotsVisible.isRunning'),
+
+  _toggleUnchangedSnapshotsVisible: task(function*() {
+    const build = this.get('build');
+    let loadedSnapshots = this._getLoadedSnapshots();
+    const allSnapshotsAreLoaded = loadedSnapshots.get('length') === build.get('totalSnapshots');
+
+    // TODO: if you use the cached snapshots here, the loading spinner does not display because it
+    // completes this operation in the same run loop.
+    // Check if all snapshots for build are loaded
+    if (!allSnapshotsAreLoaded) {
+      // If they're not all loaded, get the rest.
+      yield this.get('snapshotQuery').getUnchangedSnapshots(this.get('build'));
+      loadedSnapshots = this._getLoadedSnapshots();
+    }
+
+    const alreadyLoadedSnapshotsWithNoDiff = yield snapshotsWithNoDiffForBrowser(
+      loadedSnapshots,
+      this.get('activeBrowser'),
+    );
+
+    this.set('snapshotsUnchanged', alreadyLoadedSnapshotsWithNoDiff);
+    this.toggleProperty('isUnchangedSnapshotsVisible');
+  }),
+
   _resetUnchangedSnapshots() {
     this.set('snapshotsUnchanged', null);
     this.set('isUnchangedSnapshotsVisible', false);
@@ -67,20 +100,7 @@ export default Component.extend(PollingMixin, {
     },
 
     toggleUnchangedSnapshotsVisible() {
-      this.set('isUnchangedSnapshotsLoading', true);
-      this.get('snapshotQuery')
-        .getUnchangedSnapshots(this.get('build'))
-        .then(() => {
-          const alreadyLoadedSnapshotsWithNoDiff = snapshotsWithNoDiffForBrowser(
-            this.get('build.snapshots'),
-            this.get('activeBrowser'),
-          );
-          this.set('snapshotsUnchanged', alreadyLoadedSnapshotsWithNoDiff);
-          this.toggleProperty('isUnchangedSnapshotsVisible');
-        })
-        .finally(() => {
-          this.set('isUnchangedSnapshotsLoading', false);
-        });
+      this.get('_toggleUnchangedSnapshotsVisible').perform();
     },
 
     showSupport() {
