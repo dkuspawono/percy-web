@@ -5,7 +5,7 @@ import PollingMixin from 'percy-web/mixins/polling';
 import {inject as service} from '@ember/service';
 import {computed} from '@ember/object';
 import {snapshotsWithNoDiffForBrowser} from 'percy-web/lib/filtered-comparisons';
-import {task} from 'ember-concurrency';
+import {task, timeout} from 'ember-concurrency';
 
 export default Component.extend(PollingMixin, {
   classNames: ['BuildContainer'],
@@ -68,13 +68,16 @@ export default Component.extend(PollingMixin, {
     let loadedSnapshots = this._getLoadedSnapshots();
     const allSnapshotsAreLoaded = loadedSnapshots.get('length') === build.get('totalSnapshots');
 
-    // TODO: if you use the cached snapshots here, the loading spinner does not display because it
-    // completes this operation in the same run loop.
     // Check if all snapshots for build are loaded
     if (!allSnapshotsAreLoaded) {
       // If they're not all loaded, get the rest.
       yield this.get('snapshotQuery').getUnchangedSnapshots(this.get('build'));
       loadedSnapshots = this._getLoadedSnapshots();
+    } else {
+      // If the cached snapshots are used, the loading spinner does not display because it
+      // completes this operation in the same run loop. So pause for half a second to
+      // give the user some indication we have processed their click.
+      yield timeout(500);
     }
 
     const alreadyLoadedSnapshotsWithNoDiff = yield snapshotsWithNoDiffForBrowser(
