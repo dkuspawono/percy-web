@@ -10,7 +10,6 @@ import {task} from 'ember-concurrency';
 export default Component.extend(PollingMixin, {
   classNames: ['BuildContainer'],
   classNameBindings: ['isHidingBuildContainer:BuildContainer--snapshotModalOpen'],
-  store: service(),
 
   build: null,
   isHidingBuildContainer: false,
@@ -54,9 +53,12 @@ export default Component.extend(PollingMixin, {
   },
 
   _getLoadedSnapshots() {
-    return this.get('store')
-      .peekAll('snapshot')
-      .filterBy('build.id', this.get('build.id'));
+    // Get snapshots without making new request
+    return (
+      this.get('build')
+        .hasMany('snapshots')
+        .value() || []
+    );
   },
 
   isUnchangedSnapshotsLoading: readOnly('_toggleUnchangedSnapshotsVisible.isRunning'),

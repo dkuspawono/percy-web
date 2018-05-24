@@ -184,7 +184,8 @@ export default DS.Model.extend({
   },
 
   loadedSnapshots: computed(function() {
-    return this.store.peekAll('snapshot').filterBy('build.id', this.get('id'));
+    // Get snapshots without making new request
+    return this.hasMany('snapshots').value() || [];
   }),
 
   // Returns Ember Object with a property for each browser for the build,
