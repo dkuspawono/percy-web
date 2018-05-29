@@ -10,7 +10,7 @@ export default DS.Model.extend({
   isEnabled: DS.attr('boolean'),
   isDisabled: not('isEnabled'),
   diffBase: DS.attr(), // Either "automatic" or "manual".
-  autoApproveGlob: DS.attr('string', {defaultValue: 'master'}),
+  autoApproveBranchFilter: DS.attr('string', {defaultValue: 'master'}),
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date'),
 
