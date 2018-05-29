@@ -24,15 +24,30 @@ export default Component.extend(PollingMixin, {
     return this.get('allChangedBrowserSnapshotsSorted')[this.get('activeBrowser.id')];
   }),
 
+  browserWithMostDiffs: computed('_browsers', 'allChangedBrowserSnapshotsSorted.[]', function() {
+    const snapshots = this.get('allChangedBrowserSnapshotsSorted');
+    if (!snapshots) {
+      return;
+    }
+
+    const browserWithmostDiffsId = _browserWithMostDiffsId(snapshots);
+    return this.get('_browsers').findBy('id', browserWithmostDiffsId);
+  }),
+
   _browsers: alias('build.browsers'),
-  defaultBrowser: computed('_browsers', function() {
+
+  defaultBrowser: computed('_browsers', 'browserWithMostDiffs', function() {
     const chromeBrowser = this.get('_browsers').findBy('familySlug', 'chrome');
-    if (chromeBrowser) {
+    const browserWithMostDiffs = this.get('browserWithMostDiffs');
+    if (browserWithMostDiffs) {
+      return browserWithMostDiffs;
+    } else if (chromeBrowser) {
       return chromeBrowser;
     } else {
       return this.get('_browsers.firstObject');
     }
   }),
+
   chosenBrowser: null,
   activeBrowser: or('chosenBrowser', 'defaultBrowser'),
 
@@ -132,3 +147,19 @@ export default Component.extend(PollingMixin, {
     },
   },
 });
+
+// allChangedBrowserSnapshotsSorted is an object where the keys are browser ids and the values
+// are a list of snapshots. We want to revers this data structure and find out the browserId
+// for the longest snapshot list.
+// This method creates a hash with snapshot list length as the key and the browser id as the value,
+// then finds the highest value among keys and returns the corresponding browser id.
+function _browserWithMostDiffsId(allChangedBrowserSnapshotsSorted) {
+  const counts = {};
+  const browserIds = Object.keys(allChangedBrowserSnapshotsSorted);
+  browserIds.forEach(browserId => {
+    const snapshotsForBrowserLength = allChangedBrowserSnapshotsSorted[browserId].length;
+    counts[snapshotsForBrowserLength] = browserId;
+  });
+  const mostSnapshotsCount = Math.max(...Object.keys(counts));
+  return counts[mostSnapshotsCount];
+}
