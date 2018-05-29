@@ -16,16 +16,18 @@
     the <code>PERCY_PROJECT</code> environment variable in your CI service. Note, old build URLs
     will break if the slug is changed.
   </p>
-  <h4>Auto-Approve Branches</h4>
-  {{form-fields/input
-    property="autoApproveGlob"
-    title="Branch filter pattern"
-    changeset=changeset
-  }}
-  <p>
-    Separate multiple branches with spaces. Use * for wildcard, e.g. <b>master release-*</b> . These
-    branches will not require manual approval.
-  </p>
+  {{#if is-admin}}
+    <h4>Auto-Approve Branches</h4>
+    {{form-fields/input
+      property="autoApproveGlob"
+      title="Branch filter pattern"
+      changeset=changeset
+    }}
+    <p>
+      Separate multiple branches with spaces. Use * for wildcard, e.g. <code>master release-*</code> . These
+      branches will not require manual approval; all builds on these branches will be automatically approved.
+    </p>
+  {{/if}}
   {{form-fields/submit
     isSaving=isSaving
     isSaveSuccessful=isSaveSuccessful
