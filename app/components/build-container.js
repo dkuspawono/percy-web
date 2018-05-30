@@ -148,18 +148,32 @@ export default Component.extend(PollingMixin, {
   },
 });
 
-// allChangedBrowserSnapshotsSorted is an object where the keys are browser ids and the values
-// are a list of snapshots. We want to revers this data structure and find out the browserId
-// for the longest snapshot list.
-// This method creates a hash with snapshot list length as the key and the browser id as the value,
-// then finds the highest value among keys and returns the corresponding browser id.
 function _browserWithMostDiffsId(allChangedBrowserSnapshotsSorted) {
-  const counts = {};
-  const browserIds = Object.keys(allChangedBrowserSnapshotsSorted);
-  browserIds.forEach(browserId => {
-    const snapshotsForBrowserLength = allChangedBrowserSnapshotsSorted[browserId].length;
-    counts[snapshotsForBrowserLength] = browserId;
+  // [{browserId: foo, len: int1}, {browserId: bar, len: int2}]
+  const browserCounts = Object.keys(allChangedBrowserSnapshotsSorted).map(browserId => {
+    return {
+      browserId: browserId,
+      len: allChangedBrowserSnapshotsSorted[browserId].length,
+    };
   });
-  const mostSnapshotsCount = Math.max(...Object.keys(counts));
-  return counts[mostSnapshotsCount];
+
+  const lengths = browserCounts.mapBy('len');
+  const maxLength = Math.max(...lengths);
+
+  // dict with key as length and value as number of times that length appears in lengths array.
+  const lengthCount = lengths.reduce((acc, length) => {
+    length in acc ? (acc[length] += 1) : (acc[length] = 1);
+    return acc;
+  }, {});
+
+  // If there is more than one browser with the same number of diffs, don't return anything
+  if (lengthCount[maxLength] > 1) {
+    return;
+  } else {
+    // If there's only one browser with that number of snapshots with diffs, return that id
+    const maxLengthItem = browserCounts.findBy('len', maxLength);
+    if (maxLengthItem) {
+      return maxLengthItem.browserId;
+    }
+  }
 }
