@@ -1,16 +1,16 @@
-{{snapshot-viewer-header
-  fullscreen=false
-  snapshot=snapshot
-  snapshotSelectedWidth=snapshotSelectedWidth
-  selectedComparison=selectedComparison
-  toggleViewMode=(action showSnapshotFullModalTriggered snapshot.id snapshotSelectedWidth activeBrowser)
-  updateSelectedWidth=(action "updateSelectedWidth")
-  createReview=createReview
-  expandSnapshot=(action "expandSnapshot")
-  activeBrowser=activeBrowser
-  updateActiveBrowser=updateActiveBrowser
-}}
 {{#if inViewport}}
+  {{snapshot-viewer-header
+    fullscreen=false
+    snapshot=snapshot
+    snapshotSelectedWidth=snapshotSelectedWidth
+    selectedComparison=selectedComparison
+    toggleViewMode=(action showSnapshotFullModalTriggered snapshot.id snapshotSelectedWidth activeBrowser)
+    updateSelectedWidth=(action "updateSelectedWidth")
+    createReview=createReview
+    expandSnapshot=(action "expandSnapshot")
+    activeBrowser=activeBrowser
+    updateActiveBrowser=updateActiveBrowser
+  }}
   {{#if isExpanded}}
     {{#if selectedComparison}}
       {{comparison-viewer
@@ -29,5 +29,14 @@
     {{/if}}
   {{/if}}
 {{else}}
-  Not in viewport
+<header class="SnapshotViewer-header sticky grid gap-4 z-1 px-2 py-1 bg-gray-000 border-top border-bottom border-gray-100">
+  <div class="flex align-center truncate">
+
+    <figure class="svg-container mr-1" data-test-SnapshotViewer-comparisonIcon>
+      {{inline-svg "comparison-icon"}}
+    </figure>
+
+    <div class="Viewer-header-title SnapshotViewer-title c-default truncate text-weight-bold" data-test-SnapshotViewer-title>{{snapshot.name}}</div>
+  </div>
+</header>
 {{/if}}
