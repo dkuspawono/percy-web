@@ -149,6 +149,7 @@ export default Component.extend(PollingMixin, {
 });
 
 function _browserWithMostDiffsId(allChangedBrowserSnapshotsSorted) {
+  // need to convert the object of arrays to an array of objects
   // [{browserId: foo, len: int1}, {browserId: bar, len: int2}]
   const browserCounts = Object.keys(allChangedBrowserSnapshotsSorted).map(browserId => {
     return {
@@ -157,23 +158,17 @@ function _browserWithMostDiffsId(allChangedBrowserSnapshotsSorted) {
     };
   });
 
-  const lengths = browserCounts.mapBy('len');
-  const maxLength = Math.max(...lengths);
+  let maxCount = 0;
+  let maxCountId = null;
 
-  // dict with key as length and value as number of times that length appears in lengths array.
-  const lengthCount = lengths.reduce((acc, length) => {
-    length in acc ? (acc[length] += 1) : (acc[length] = 1);
-    return acc;
-  }, {});
-
-  // If there is more than one browser with the same number of diffs, don't return anything
-  if (lengthCount[maxLength] > 1) {
-    return;
-  } else {
-    // If there's only one browser with that number of snapshots with diffs, return that id
-    const maxLengthItem = browserCounts.findBy('len', maxLength);
-    if (maxLengthItem) {
-      return maxLengthItem.browserId;
+  browserCounts.forEach(browserCount => {
+    if (browserCount.len > maxCount) {
+      maxCount = browserCount.len;
+      maxCountId = browserCount.browserId;
+    } else if (browserCount.len === maxCount) {
+      return;
     }
-  }
+  });
+
+  return maxCountId;
 }

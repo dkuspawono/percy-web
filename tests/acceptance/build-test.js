@@ -154,13 +154,13 @@ describe('Acceptance: Build', function() {
 
       await BuildPage.visitBuild(urlParams);
       // Same order as above
-      expect(BuildPage.snapshots(0).name).to.equal(defaultSnapshot.name);
-      expect(BuildPage.snapshots(1).name).to.equal(twoWidthsSnapshot.name);
+      expect(BuildPage.snapshots(0).name).to.equal(twoWidthsSnapshot.name);
+      expect(BuildPage.snapshots(1).name).to.equal(defaultSnapshot.name);
       await BuildPage.browserSwitcher.switchBrowser();
 
       // Previously first snapshot should now be second.
-      expect(BuildPage.snapshots(0).name).to.equal(twoWidthsSnapshot.name);
-      expect(BuildPage.snapshots(1).name).to.equal(defaultSnapshot.name);
+      expect(BuildPage.snapshots(0).name).to.equal(defaultSnapshot.name);
+      expect(BuildPage.snapshots(1).name).to.equal(twoWidthsSnapshot.name);
     });
   });
 
