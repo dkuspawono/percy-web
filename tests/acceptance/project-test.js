@@ -47,15 +47,6 @@ describe('Acceptance: Project', function() {
   });
 
   describe('settings', function() {
-    // This is necessary while the auto-approve-branch-filter part of the settings page
-    // is behind the is-admin flag:
-    beforeEach(function() {
-      adminMode.setAdminMode();
-    });
-    afterEach(function() {
-      adminMode.clear();
-    });
-
     let organization;
     let versionControlIntegration;
     let repos;
@@ -110,11 +101,22 @@ describe('Acceptance: Project', function() {
       await percySnapshot(this.test);
     });
 
-    it('displays Auto-Approve Branches setting', async function() {
-      await visit(`/${this.enabledProject.fullSlug}/settings`);
-      await percySnapshot(this.test);
+    context('admin mode', function() {
+      // This is necessary while the auto-approve-branch-filter part of the settings page
+      // is behind the is-admin flag:
+      beforeEach(function() {
+        adminMode.setAdminMode();
+      });
+      afterEach(function() {
+        adminMode.clear();
+      });
 
-      expect(find('h4:contains("Auto-Approve Branches")').length).to.equal(1);
+      it('displays Auto-Approve Branches setting', async function() {
+        await visit(`/${this.enabledProject.fullSlug}/settings`);
+        await percySnapshot(this.test);
+
+        expect(find('h4:contains("Auto-Approve Branches")').length).to.equal(1);
+      });
     });
   });
 
