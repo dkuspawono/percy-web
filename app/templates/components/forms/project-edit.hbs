@@ -16,11 +16,12 @@
     the <code>PERCY_PROJECT</code> environment variable in your CI service. Note, old build URLs
     will break if the slug is changed.
   </p>
-  {{#if is-admin}}
+  {{#if (is-admin)}}
+    <hr>
     <h4>Auto-Approve Branches</h4>
     <p>
       Builds with branches that match this filter will be automatically approved and won't require
-      manual approval
+      manual approval.
     </p>
     {{form-fields/input
       property="autoApproveBranchFilter"
