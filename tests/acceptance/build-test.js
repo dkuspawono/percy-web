@@ -68,6 +68,8 @@ describe('Acceptance: Build', function() {
     await BuildPage.snapshotList.clickToggleNoDiffsSection();
     expect(BuildPage.snapshots().count).to.equal(6);
     expect(store.peekAll('snapshot').get('length')).to.equal(7);
+
+    await percySnapshot(this.test);
   });
 
   describe('snapshot order/caching', function() {

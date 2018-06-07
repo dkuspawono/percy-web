@@ -13,7 +13,7 @@ export const BUILD_STATES = {
 };
 
 const APPROVED_LABEL = 'Approved';
-const AUTO_APPROVED_BRANCH_LABEL = 'Auto-Approved Branch';
+const AUTO_APPROVED_BRANCH_LABEL = 'Auto Approved';
 const EXPIRED_LABEL = 'Expired';
 const FAILED_LABEL = 'Failed';
 const NO_DIFFS_LABEL = 'No Changes';
