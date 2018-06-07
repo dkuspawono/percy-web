@@ -57,17 +57,24 @@ describe('Acceptance: Build', function() {
     // add some snapshots (to the four above) to cover every review state reason.
     server.create('snapshot', 'withComparison', 'userApproved', {build});
     server.create('snapshot', 'withComparison', 'userApprovedPreviously', {build});
-    server.create('snapshot', 'withComparison', 'autoApprovedBranch', {build});
 
     await BuildPage.visitBuild(urlParams);
     const store = this.application.__container__.lookup('service:store');
     expect(BuildPage.snapshots().count).to.equal(5);
     expect(BuildPage.isUnchangedPanelVisible).to.equal(true);
-    expect(store.peekAll('snapshot').get('length')).to.equal(6);
+    expect(store.peekAll('snapshot').get('length')).to.equal(5);
 
     await BuildPage.snapshotList.clickToggleNoDiffsSection();
     expect(BuildPage.snapshots().count).to.equal(6);
-    expect(store.peekAll('snapshot').get('length')).to.equal(7);
+    expect(store.peekAll('snapshot').get('length')).to.equal(6);
+  });
+
+  it('shows Auto-Approved diffs', async function() {
+    server.create('snapshot', 'withComparison', 'autoApprovedBranch', {build});
+    server.create('snapshot', 'withComparison', 'autoApprovedBranch', {build});
+
+    await BuildPage.visitBuild(urlParams);
+    expect(BuildPage.snapshots().count).to.equal(3);
 
     await percySnapshot(this.test);
   });
