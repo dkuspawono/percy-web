@@ -46,6 +46,9 @@ export default Factory.extend({
     state: BUILD_STATES.FINISHED,
     reviewState: 'approved',
     reviewStateReason: 'auto_approved_branch',
+    afterCreate(build, server) {
+      server.create('snapshot', 'autoApprovedBranch', {build});
+    },
   }),
 
   pending: trait({
