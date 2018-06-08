@@ -23,11 +23,6 @@ const _noDiffProps = {
   reviewStateReason: SNAPSHOT_REVIEW_STATE_REASONS.NO_DIFFS,
 };
 
-const _autoApprovedBranchProps = {
-  reviewState: SNAPSHOT_APPROVED_STATE,
-  reviewStateReason: SNAPSHOT_REVIEW_STATE_REASONS.AUTO_APPROVED_BRANCH,
-};
-
 export default Factory.extend({
   id(i) {
     return `snapshot-${i}`;
@@ -39,8 +34,6 @@ export default Factory.extend({
   unreviewed: trait(_unreviewedProps),
   userApproved: trait(_userApprovedProps),
   userApprovedPreviously: trait(_userApprovedPreviouslyProps),
-
-  autoApprovedBranch: trait(_autoApprovedBranchProps),
 
   withComparison: trait(
     Object.assign({}, _unreviewedProps, {

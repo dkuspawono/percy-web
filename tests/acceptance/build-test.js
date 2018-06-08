@@ -69,16 +69,6 @@ describe('Acceptance: Build', function() {
     expect(store.peekAll('snapshot').get('length')).to.equal(6);
   });
 
-  it('shows Auto-Approved diffs', async function() {
-    server.create('snapshot', 'withComparison', 'autoApprovedBranch', {build});
-    server.create('snapshot', 'withComparison', 'autoApprovedBranch', {build});
-
-    await BuildPage.visitBuild(urlParams);
-    expect(BuildPage.snapshots().count).to.equal(3);
-
-    await percySnapshot(this.test);
-  });
-
   describe('snapshot order/caching', function() {
    it('displays snapshots in the correct order, before and after approval when build is finished', async function() { // eslint-disable-line
 
