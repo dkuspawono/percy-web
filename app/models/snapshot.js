@@ -53,6 +53,10 @@ export default DS.Model.extend({
     'reviewStateReason',
     SNAPSHOT_REVIEW_STATE_REASONS.USER_APPROVED_PREVIOUSLY,
   ),
+  isAutoApprovedBranch: equal(
+    'reviewStateReason',
+    SNAPSHOT_REVIEW_STATE_REASONS.AUTO_APPROVED_BRANCH,
+  ),
   isUnchanged: equal('reviewStateReason', SNAPSHOT_REVIEW_STATE_REASONS.NO_DIFFS),
 
   // Is true for both approved in build and approved by carry-forward.
