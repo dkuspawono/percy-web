@@ -42,6 +42,12 @@ export default Factory.extend({
     totalComparisonsDiff: 0,
   }),
 
+  approvedAutoBranch: trait({
+    state: BUILD_STATES.FINISHED,
+    reviewState: 'approved',
+    reviewStateReason: 'auto_approved_branch',
+  }),
+
   pending: trait({
     state: BUILD_STATES.PENDING,
   }),
