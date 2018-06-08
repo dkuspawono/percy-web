@@ -59,8 +59,12 @@ export default DS.Model.extend({
   ),
   isUnchanged: equal('reviewStateReason', SNAPSHOT_REVIEW_STATE_REASONS.NO_DIFFS),
 
-  // Is true for both approved in build and approved by carry-forward.
-  isApprovedByUserEver: or('isApprovedByUser', 'isApprovedByUserPreviously'),
+  // Is true for approved in build, approved by carry-forward, and auto-approved by branch.
+  isApprovedWithChanges: or(
+    'isApprovedByUser',
+    'isApprovedByUserPreviously',
+    'isAutoApprovedBranch',
+  ),
 
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date'),
