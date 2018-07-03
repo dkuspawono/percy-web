@@ -36,9 +36,10 @@ Router.map(function() {
   this.route(VERIFY_EMAIL_ROUTE, {path: '/auth/verify-email'});
   this.route(VERIFICATION_REQUIRED_ROUTE, {path: '/auth/email-verification-required'});
   this.route(PASSWORD_UPDATED_ROUTE, {path: '/auth/password-updated'});
-  // this.route('docs', {path: '/docs'}, function() {
-  //   this.route('page', {path: '*path'});
-  // });
+  // docs and child routes are deprecated and are interceptend in application route for redirect.
+  this.route('docs', {path: '/docs'}, function() {
+    this.route('page', {path: '*path'});
+  });
   this.route('login');
   this.route('pricing');
   this.route('enterprise');
