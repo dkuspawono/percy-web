@@ -2,8 +2,6 @@ import Route from '@ember/routing/route';
 import utils from 'percy-web/lib/utils';
 import {Promise} from 'rsvp';
 
-export const AUTH_REDIRECT_LOCALSTORAGE_KEY = 'percyAttemptedTransition';
-
 const REDIRECTS = {
   '/docs/clients/javascript/react-storybook': '/docs/storybook-for-react',
 };
@@ -16,15 +14,13 @@ export default Route.extend({
     // causing visual jank.
     // The promise does not resolve, as we do not want the app to proceed further
     // if we are redirecting
-    if (window.location.origin.includes('percy') && transition.intent.url.includes('docs')) {
-      return new Promise(() => {
-        const targetPage = transition.intent.url;
-        if (targetPage in REDIRECTS) {
-          return utils.setWindowLocation(`https://docs.percy.io${REDIRECTS[targetPage]}`);
-        } else {
-          return utils.setWindowLocation('https://docs.percy.io');
-        }
-      });
-    }
+    return new Promise(() => {
+      const targetPage = transition.intent.url;
+      if (targetPage in REDIRECTS) {
+        return utils.setWindowLocation(`https://docs.percy.io${REDIRECTS[targetPage]}`);
+      } else {
+        return utils.setWindowLocation('https://docs.percy.io');
+      }
+    });
   },
 });
