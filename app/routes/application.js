@@ -17,6 +17,10 @@ export default Route.extend(ApplicationRouteMixin, EnsureStatefulLogin, {
 
   beforeModel(transition) {
     this._super(...arguments);
+    debugger;
+    if (window.location.origin.includes('percy') && transition.intent.url.includes('docs')) {
+      window.location.replace('https://docs.percy/io');
+    }
     if (!this.get('session.isAuthenticated')) {
       this._storeTargetTransition(transition);
 
