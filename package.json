@@ -74,7 +74,7 @@
     "ember-font-awesome": "^3.1.1",
     "ember-in-viewport": "^3.1.0",
     "ember-inflector": "^3.0.0",
-    "ember-inline-svg": "^0.1.11",
+    "ember-inline-svg": "^0.2.0",
     "ember-load-initializers": "^1.1.0",
     "ember-modal-dialog": "^2.4.0",
     "ember-moment": "^7.7.0",
