@@ -52,8 +52,8 @@
     tslib "^1"
 
 "@oclif/command@^1.4.21", "@oclif/command@^1.4.30", "@oclif/command@^1.4.34":
-  version "1.4.35"
-  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.4.35.tgz#28e73de80215e471f953b57f861558efcdd7c677"
+  version "1.4.36"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.4.36.tgz#cca1e02d8264f34be9c2d692a3c81efc0de15fdf"
   dependencies:
     "@oclif/errors" "^1.1.2"
     "@oclif/parser" "^3.5.2"
@@ -115,9 +115,9 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.2.tgz#c9d7c84b0ea60ecec8dd7a9b22c012ba9967aed8"
 
-"@percy/agent@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@percy/agent/-/agent-0.0.12.tgz#300321867abd0defcfd825c3f09e0adfa9c909ae"
+"@percy/agent@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@percy/agent/-/agent-0.0.13.tgz#2778b26989055730bcdac99f57cb3f6c6f694ba2"
   dependencies:
     "@oclif/command" "^1.4.21"
     "@oclif/config" "^1.6.16"
@@ -203,8 +203,8 @@
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.0.tgz#5a7306e367c539b9f6543499de8dd519fac37a8b"
 
 "@types/node@*":
-  version "10.5.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.2.tgz#f19f05314d5421fe37e74153254201a7bf00a707"
+  version "10.5.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
 
 "@types/node@^9.6.0":
   version "9.6.22"
@@ -7246,7 +7246,7 @@ loglevel@^1.4.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
 
-lolex@^2.2.0, lolex@^2.3.2, lolex@^2.4.2:
+lolex@^2.2.0, lolex@^2.3.2, lolex@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/lolex/-/lolex-2.7.1.tgz#e40a8c4d1f14b536aa03e42a537c7adbaf0c20be"
 
@@ -7768,7 +7768,7 @@ nice-try@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"
 
-nise@^1.2.0, nise@^1.3.3:
+nise@^1.2.0, nise@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/nise/-/nise-1.4.2.tgz#a9a3800e3994994af9e452333d549d60f72b8e8c"
   dependencies:
@@ -8355,7 +8355,7 @@ pbkdf2-compat@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/pbkdf2-compat/-/pbkdf2-compat-2.0.1.tgz#b6e0c8fa99494d94e0511575802a59a5c142f288"
 
-percy-client@^2.8.0, percy-client@^2.8.2:
+percy-client@^2.8.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/percy-client/-/percy-client-2.9.0.tgz#dcf8c972f4b583090fe5388234ab4d33255564c6"
   dependencies:
@@ -8367,6 +8367,22 @@ percy-client@^2.8.0, percy-client@^2.8.2:
     regenerator-runtime "^0.11.1"
     request "^2.85.0"
     request-promise "^4.2.2"
+  optionalDependencies:
+    lint-staged "^7.0.4"
+
+percy-client@^2.8.2:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/percy-client/-/percy-client-2.11.0.tgz#65e912b4ae4d2d0937360d43b8cdcd2c86ae0ed0"
+  dependencies:
+    base64-js "^1.2.3"
+    bluebird "^3.5.1"
+    bluebird-retry "^0.11.0"
+    es6-promise-pool "^2.5.0"
+    jssha "^2.1.0"
+    regenerator-runtime "^0.11.1"
+    request "^2.85.0"
+    request-promise "^4.2.2"
+    walk "^2.3.14"
   optionalDependencies:
     lint-staged "^7.0.4"
 
@@ -9690,15 +9706,15 @@ sinon@^4.4.5:
     type-detect "^4.0.5"
 
 sinon@^6.1.3:
-  version "6.1.3"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-6.1.3.tgz#98e7d716b7b11f7f1200e9c997e74f50ae094660"
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-6.1.4.tgz#b67f7a7b7fe2496042b54a5c2f425e2d699927a2"
   dependencies:
     "@sinonjs/formatio" "^2.0.0"
     "@sinonjs/samsam" "^2.0.0"
     diff "^3.5.0"
     lodash.get "^4.4.2"
-    lolex "^2.4.2"
-    nise "^1.3.3"
+    lolex "^2.7.1"
+    nise "^1.4.2"
     supports-color "^5.4.0"
     type-detect "^4.0.8"
 
@@ -10949,7 +10965,7 @@ walk-sync@^0.3.0, walk-sync@^0.3.1, walk-sync@^0.3.2:
     ensure-posix-path "^1.0.0"
     matcher-collection "^1.0.0"
 
-walk@^2.3.9:
+walk@^2.3.14, walk@^2.3.9:
   version "2.3.14"
   resolved "https://registry.yarnpkg.com/walk/-/walk-2.3.14.tgz#60ec8631cfd23276ae1e7363ce11d626452e1ef3"
   dependencies:
